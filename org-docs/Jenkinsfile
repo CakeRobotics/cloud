@@ -1,22 +1,31 @@
-def dockerImage
 pipeline {
   agent any
   stages {
     stage('Build') {
-      steps{
+      steps {
         script {
           dockerImage = docker.build "images.cakerobotics.com/mostafa/org-docs:latest", "."
         }
+
       }
     }
+
     stage('Push') {
-      steps{
-        script{
+      steps {
+        script {
           withDockerRegistry(credentialsId: 'jenkins-keycloak', url: 'https://images.cakerobotics.com/v2/') {
             dockerImage.push()
           }
         }
+
       }
     }
+
+    stage('Deploy') {
+      steps {
+        sh 'curl -H "Content-Type: application/json" -X POST -d \'{"service": "nginx", "directory": "/services/com.cakerobotics.org-docs"}\' https://utils.france-1.servers.cakerobotics.com/docker-compose-deliver'
+      }
+    }
+
   }
 }
