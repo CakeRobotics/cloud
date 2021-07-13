@@ -1,0 +1,22 @@
+def dockerImage
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps{
+        script {
+          dockerImage = docker.build "images.cakerobotics.com/mostafa/org-docs-engine:alpha", "."
+        }
+      }
+    }
+    stage('Push') {
+      steps{
+        script{
+          withDockerRegistry(credentialsId: 'jenkins-keycloak', url: 'https://images.cakerobotics.com/v2/') {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+  }
+}
