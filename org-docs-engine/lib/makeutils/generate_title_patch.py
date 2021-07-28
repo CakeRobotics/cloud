@@ -2,7 +2,7 @@
 # usage example: ./generate_title_patch.py --lang=fa ./src/0001/fa/about.yaml
 
 import argparse
-from os.path import dirname
+from os.path import dirname, basename
 import re
 
 from dirhash import dirhash
@@ -25,7 +25,7 @@ def main():
     scope = about['SCOPE']
     labels = '، '.join(about['LABELS']) if len (about['LABELS']) > 0 else '—'
     version = len(about['VERSIONS'])
-    id = re.findall(r'(\d+)', args['about'])[0]
+    id = basename(dirname(dirname(args['about']))) # Because dir structure is /id/lang/about.yaml
 
     hash = dirhash(dirname(args['about']), 'md5')[0:6]
     
