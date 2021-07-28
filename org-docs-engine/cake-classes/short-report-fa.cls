@@ -50,7 +50,7 @@
 	\begin{center}
 	\begin{tabular}{|p{5cm}p{7cm}|}
 	\hline
-	شماره سند: \Verb!\id! & نویسنده اصلی: \theauthor \\
+	کد سند: \Verb!\id! & نویسنده اصلی: \theauthor \\
 	نسخه: \version & سایر نویسندگان: \otherauthors \\
 	تاریخ: \thedate & دامنه انتشار سند: \scope \\
 	تعداد صفحات: \pageref*{LastPage} & برچسب‌ها: \labels \\
