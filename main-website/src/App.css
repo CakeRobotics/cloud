@@ -1,0 +1,87 @@
+body, html {
+  font-family:Arial, Helvetica, sans-serif;
+  color: #111;
+  background-color: #fcfcfc;
+}
+
+.App {
+  text-align: center;
+}
+
+.carousel-caption {
+  border-radius: 0.5em;
+  bottom: 3rem;
+}
+
+.carousel-caption > * {
+  background-color: #fff;
+  width: fit-content;
+  padding: 0.1em 0.4em;
+  margin: 0.2em auto;
+  color: #333;
+  border: 1px solid #333;
+  /* border-radius: 5px; */
+}
+
+.carousel-caption > h4 {
+  padding: 0.2em 0.4em;
+}
+
+.carousel-control-next-icon, .carousel-control-prev-icon {
+  background-color: #000;
+  border-radius: 50%;
+  padding: 1em;
+}
+
+.carousel {
+  cursor: pointer;
+}
+
+.homepage-lower-area > * {
+  
+}
+
+.homepage-btn-gp > * {
+  margin: 0.6em 0.3em;
+  width: 8em;
+}
+
+.homepage-btn-gp {
+  width: auto;
+  margin: auto;
+}
+
+.homepage-logo {
+  width: auto;
+  height: 4em;
+}
+
+.App-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0.5em;
+  /* width: fit-content; */
+}
+
+.App-header > * {
+  /* margin: auto 0.2em; */
+}
+
+.homepage-footer {
+  /* background-color: #666; */
+  /* color: #fcfcfc; */
+  z-index: 100;
+  background-color: white;
+  color: #666;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 2em;
+}
+
+.homepage-content {
+  margin-bottom: 3em;
+}
