@@ -2,6 +2,7 @@ import './App.css';
 import { Carousel, CarouselItem, Button } from 'react-bootstrap';
 import CarouselImage from './components/CarouselImage';
 import React from 'react';
+import "@fontsource/actor"
 
 class App extends React.Component {
   componentDidMount() {

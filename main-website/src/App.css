@@ -1,5 +1,5 @@
 body, html {
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: "Actor", sans-serif;
   color: #111;
   background-color: #fcfcfc;
 }
@@ -9,22 +9,23 @@ body, html {
 }
 
 .carousel-caption {
-  border-radius: 0.5em;
   bottom: 3rem;
+  padding: 0.4em 1em;
 }
 
 .carousel-caption > * {
-  background-color: #fff;
+  background-color: rgb(44, 90, 151);
   width: fit-content;
-  padding: 0.1em 0.4em;
+  padding: 0.1em 0.2em;
   margin: 0.2em auto;
-  color: #333;
-  border: 1px solid #333;
-  /* border-radius: 5px; */
+  color: #fff;
+  border-radius: 5px;
 }
 
 .carousel-caption > h4 {
   padding: 0.2em 0.4em;
+  font-weight: 100;
+  color: #fffe;
 }
 
 .carousel-control-next-icon, .carousel-control-prev-icon {
