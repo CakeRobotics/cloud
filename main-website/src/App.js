@@ -38,7 +38,7 @@ class App extends React.Component {
             <CarouselItem interval="10000">
               <CarouselImage imgkey="code-efficiently"/>
               <Carousel.Caption>
-                <h1>Code Efficiently</h1>
+                <h1>Programming Robots Efficiently</h1>
                 <h4>Our high-level libraries allow you to focus on the task.</h4>
               </Carousel.Caption>
             </CarouselItem>
