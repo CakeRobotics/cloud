@@ -1,0 +1,29 @@
+{
+    "name": "cake-auth-service",
+    "version": "1.0.0",
+    "author": "Mostafa Farzan <m2_farzan@yahoo.com>",
+    "license": "GPL-3.0-only",
+    "scripts": {
+        "start": "node ./src/server.js",
+        "test": "export $(xargs < .env) && jest --runInBand --testTimeout=20000",
+        "watch": "nodemon ./src/server.js"
+    },
+    "dependencies": {
+        "argon2": "^0.28.2",
+        "express": "^4.17.1",
+        "helmet": "^4.6.0",
+        "http-status-codes": "^2.1.4",
+        "jsonwebtoken": "^8.5.1",
+        "pg": "^8.7.1"
+    },
+    "devDependencies": {
+        "jest": "^27.0.6",
+        "supertest": "^6.1.4"
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "coveragePathIgnorePatterns": [
+          "/node_modules/"
+        ]
+    }
+}
