@@ -14,12 +14,12 @@ body, html {
 }
 
 .carousel-caption > * {
-  background-color: rgb(44, 90, 151);
+  background-color: white;
   width: fit-content;
   padding: 0.1em 0.2em;
   margin: 0.2em auto;
-  color: #fff;
   border-radius: 5px;
+  box-shadow: 1px 1px 3px black;
 }
 
 .carousel-caption > h4 {
