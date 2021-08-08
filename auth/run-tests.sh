@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set +e
-docker stop auth-db-test || "No test database container was found. No action is required."
+docker stop auth-db-test || echo "No test database container was found. No action is required."
 
 set -e
 export $(xargs < .env)
@@ -14,7 +14,12 @@ docker run --rm -d --name=auth-db-test \
     postgres
 
 set +e
-yarn test
+docker run --rm \
+    -v $(pwd)/.env:/app/.env \
+    --entrypoint=/bin/sh \
+    --network host \
+    images.cakerobotics.com/mostafa/auth:latest \
+    -c "cd /app && yarn test"
 EXITCODE=$?
 
 set -e

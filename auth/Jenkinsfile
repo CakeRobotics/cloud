@@ -6,11 +6,13 @@ pipeline {
         script {
           sh '${WORKSPACE}/docs/make.sh'
         }
+        stash includes: '**/docs/index.html', name: 'docs'
       }
     }
 
     stage('Publish Docs') {
       steps {
+        unstash 'docs'
         script {
           withCredentials([usernamePassword(credentialsId: 'jenkins-keycloak', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             env.TOKEN = sh(script: '''
@@ -20,7 +22,7 @@ pipeline {
             set +x
             echo "Using ${USERNAME}:*****"
             TEMPFILE=$(mktemp)
-            curl -o ${TEMPFILE} -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -F "file=@${WORKSPACE}/docs/index.html" https://utils.france-1.servers.cakerobotics.com/publish-api-doc/auth
+            curl -o ${TEMPFILE} -H "Authorization: Bearer ${TOKEN}" -F "file=@${WORKSPACE}/docs/index.html" https://utils.france-1.servers.cakerobotics.com/publish-api-doc/auth
             cat ${TEMPFILE} | grep Success
             set -x
             '''
@@ -40,7 +42,7 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          sh '${WORKDIR}/run-tests.sh'
+          sh '${WORKSPACE}/run-tests.sh'
         }
 
       }
