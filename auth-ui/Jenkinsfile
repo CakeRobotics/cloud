@@ -32,7 +32,7 @@ pipeline {
             set +x
             echo "Using ${USERNAME}:*****"
             TEMPFILE=$(mktemp)
-            curl -o ${TEMPFILE} -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -d \'{"service": "main-website", "directory": "/services/auth-ui"}\' https://utils.france-1.servers.cakerobotics.com/docker-compose-deliver
+            curl -o ${TEMPFILE} -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -d \'{"service": "auth-ui", "directory": "/services/cake-ui"}\' https://utils.france-1.servers.cakerobotics.com/docker-compose-deliver
             cat ${TEMPFILE} | grep Success
             set -x
             '''
