@@ -15,7 +15,9 @@ class App extends React.Component {
       <Router>
         <div className="App">
           <header className="App-header">
-            <img className="App-logo" alt="Logo" src={require('./img/logo-h.png').default} />
+            <a href="/">
+              <img className="App-logo" alt="Logo" src={require('./img/logo-h.png').default} />
+            </a>
           </header>
           <Switch>
             <Route path="/terms">
