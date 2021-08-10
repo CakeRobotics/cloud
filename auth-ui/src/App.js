@@ -15,9 +15,9 @@ function App() {
         <Router basename={process.env.PUBLIC_URL}>
             <div className="App">
                 <header className="header">
-                    <Link to="/">
+                    <a href="https://cakerobotics.com">
                         <img className="logo" alt="Logo" src={require('./img/logo-h.png').default} />
-                    </Link>
+                    </a>
                 </header>
                 <div className="content">
                     <Switch>
