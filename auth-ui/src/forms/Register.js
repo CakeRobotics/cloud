@@ -3,6 +3,7 @@
 import Alert from 'react-bootstrap/Alert';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
+import FormCheck from 'react-bootstrap/FormCheck';
 import React from 'react';
 import { Link } from "react-router-dom";
 
@@ -130,6 +131,10 @@ class Register extends React.Component {
                         })}}
                     />
                 </div>
+            </div>
+
+            <div className="select-group">
+                <FormCheck label={<label>I agree to the <a href="https://cakerobotics.com/terms">Terms of Service</a></label>}/>
             </div>
 
             <div className="button-group">

@@ -72,3 +72,13 @@ button {
 .bottom-text:hover {
     color: lightblue;
 }
+
+.form-check {
+    color: white;
+    margin-top: 1em;
+}
+
+.form-check a {
+    color: lightblue;
+    margin-top: 1em;
+}
