@@ -7,3 +7,4 @@ RUN yarn build
 
 FROM nginx
 COPY --from=builder /app/build /usr/share/nginx/html
+COPY server.conf /etc/nginx/conf.d/default.conf
