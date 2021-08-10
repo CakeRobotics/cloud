@@ -7,6 +7,7 @@ import {
   Route,
 } from "react-router-dom";
 import Homepage from './pages/homepage';
+import Terms from './pages/terms';
 
 class App extends React.Component {
   render() {
@@ -17,6 +18,9 @@ class App extends React.Component {
             <img className="App-logo" alt="Logo" src={require('./img/logo-h.png').default} />
           </header>
           <Switch>
+            <Route path="/terms">
+              <Terms/>
+            </Route>
             <Route path="/">
               <Homepage/>
             </Route>
