@@ -1,25 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import "@fontsource/actor"
+import Login from './forms/Login';
+import Register from './forms/Register';
+import CreateRegistrationToken from './forms/CreateRegistrationToken';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router basename={process.env.PUBLIC_URL}>
+            <div className="App">
+                <header className="header">
+                    <Link to="/">
+                        <img className="logo" alt="Logo" src={require('./img/logo-h.png').default} />
+                    </Link>
+                </header>
+                <div className="content">
+                    <Switch>
+                        <Route path="/login">
+                            <Login/>
+                        </Route>
+                        <Route path="/register">
+                            <Register/>
+                        </Route>
+                        <Route path="/createRegistrationToken">
+                            <CreateRegistrationToken/>
+                        </Route>
+                    </Switch>
+                </div>
+                <footer className="footer">
+                    <p>© 2021 Cake Robotics</p>
+                </footer>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
