@@ -68,9 +68,9 @@ class App extends React.Component {
           <div className="homepage-lower-area">
             <div className="homepage-btn-gp">
               <Button size="lg" href="/docs">Learn More</Button>
-              <Button size="lg" className="btn-success" href="https://cakerobotics.com/auth/register">Sign Up</Button>
+              <Button size="lg" className="btn-success" href="https://cloud.cakerobotics.com/auth/register">Sign Up</Button>
             </div>
-            <p>Already have an account? Login <a href="https://cakerobotics.com/auth/login">here</a>.</p>
+            <p>Already have an account? Login <a href="https://cloud.cakerobotics.com/auth/login">here</a>.</p>
           </div>
         </div>
         <footer className="homepage-footer">
