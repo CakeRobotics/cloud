@@ -141,7 +141,7 @@ class Register extends React.Component {
                 <Button onClick={this.register.bind(this)} className="btn-primary" type="submit">Register</Button>
             </div>
 
-            <a href="https://google.com" className="bottom-text">Don't have invitation code?</a>
+            <a href="https://forms.gle/d2ShWyDedL3yBbQ97" className="bottom-text">Don't have invitation code?</a>
             <Link to="/login" className="bottom-text">Already have an account?</Link>
         </main>
     }
