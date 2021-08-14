@@ -171,3 +171,12 @@ paths:
               example: "7GtXI76tH9XXFSMt"
         '401':
           description: Bad authorization token
+
+  /health:
+    get:
+      summary: Used to check service health
+      description: If the node is healthy, it returns a 200 response.
+      operationId: health
+      responses:
+        '200':
+          description: Service can respond.
