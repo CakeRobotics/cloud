@@ -6,7 +6,6 @@ docker stop auth-db-test || echo "No test database container was found. No actio
 set -e
 export $(xargs < .env)
 docker run --rm -d --name=auth-db-test \
-    -v $(pwd)/utils/50-init-tables.sql:/docker-entrypoint-initdb.d/50-init-tables.sql:ro \
     -p 5432:5432 \
     -e POSTGRES_USER=${POSTGRES_USER} \
     -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \

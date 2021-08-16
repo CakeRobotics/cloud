@@ -1,5 +1,7 @@
 'use strict'
 
+const db = require('../db');
+
 module.exports = async function() {
     while (true) {
         try {
