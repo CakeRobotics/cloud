@@ -9,18 +9,6 @@ const db = require('../db');
 
 
 module.exports = async function() {
-    while (true) {
-        try {
-            const connection = await db.pool.connect();
-            connection.release();
-            break;
-        } catch (error) {
-            console.log(error);
-            console.log('Retrying in 1 sec...');
-            await new Promise(r => setTimeout(r, 1000));
-        }
-    }
-
     const superAdminUsername = process.env.ADMIN_USERNAME;
     const superAdminPassword = process.env.ADMIN_PASSWORD;
     const superAdminEmail = process.env.ADMIN_EMAIL;
