@@ -11,6 +11,7 @@ const endpoints = [
     "/health",
     "/login",
     "/register",
+    "/users",
     "/validate",
 ];
 

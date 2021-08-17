@@ -180,3 +180,41 @@ paths:
       responses:
         '200':
           description: Service can respond.
+
+  /users/{username}:
+    get:
+      summary: Get information about a user
+      description: Returns username, email and type of a user, given its username.
+      operationId: getUser
+      security:
+        - adminUser: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+            example: carol
+      responses:
+        '200':
+          description: Returns user info.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  type:
+                    type: string
+                    enum:
+                      - normal
+                      - admin
+                example:
+                  username: carol
+                  email: carol@example.com
+                  type: normal
+        '401':
+          description: Bad authorization token
