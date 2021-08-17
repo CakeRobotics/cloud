@@ -3,4 +3,5 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn
 COPY . ./
+ENV TERM xterm-256color
 ENTRYPOINT ["yarn", "start"]

@@ -13,7 +13,7 @@ docker run --rm -d --name=auth-db-test \
     postgres
 
 set +e
-docker run --rm \
+docker run --rm -t \
     -v $(pwd)/.env:/app/.env \
     --entrypoint=/bin/sh \
     --network host \
