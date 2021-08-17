@@ -47,7 +47,7 @@ paths:
             application/json:
               schema:
                 type: string
-              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNha2UiLCJlbWFpbCI6ImNha2VAZXhhbXBsZS5jb20iLCJpYXQiOjE2Mjc5MjQzMDR9.KmwG7Lzqvgj0O1Av6fFstZC-YXFx3djm9YvQYU3dY0A"
+                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNha2UiLCJlbWFpbCI6ImNha2VAZXhhbXBsZS5jb20iLCJpYXQiOjE2Mjc5MjQzMDR9.KmwG7Lzqvgj0O1Av6fFstZC-YXFx3djm9YvQYU3dY0A"
         '401':
           description: Wrong username or password
 
@@ -86,10 +86,10 @@ paths:
                     enum:
                       - normal
                       - admin
-              example:
-                username: example-user
-                email: user@example.com
-                type: normal
+                example:
+                  username: example-user
+                  email: user@example.com
+                  type: normal
         '406':
           description: Bad token or username encoded in the token was not found in database. (i.e. username has been changed or removed after the token was issued.)
   
@@ -170,7 +170,7 @@ paths:
             application/json:
               schema:
                 type: string
-              example: "7GtXI76tH9XXFSMt"
+                example: "7GtXI76tH9XXFSMt"
         '401':
           description: Bad authorization token
 
