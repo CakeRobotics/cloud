@@ -12,6 +12,9 @@ docker run --rm -d --name=auth-db-test \
     -e POSTGRES_DB=${POSTGRES_DB} \
     postgres
 
+# Ensure latest build
+docker build . -t images.cakerobotics.com/mostafa/auth:latest
+
 set +e
 docker run --rm -t \
     -v $(pwd)/.env:/app/.env \
