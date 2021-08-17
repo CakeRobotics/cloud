@@ -42,5 +42,6 @@ describe('Validate login', function() {
         responseData = JSON.parse(response.text);
         expect(responseData.username).toEqual("test-validate");
         expect(responseData.email).toEqual("test_validate@example.com");
+        expect(responseData.type).toEqual("normal");
     })
 })

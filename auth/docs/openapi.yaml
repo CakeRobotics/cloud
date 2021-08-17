@@ -54,7 +54,7 @@ paths:
   /validate:
     post:
       summary: Validate a user login token
-      description: Gets a user token, verifies it, and returns information about the user that owns the token.
+      description: Gets a user token, verifies it, and returns extra information about the user that owns the token.
       operationId: validate
       requestBody:
         required: true
@@ -81,15 +81,17 @@ paths:
                     type: string
                   email:
                     type: string
-                  iat:
-                    type: integer
-                    description: The time when the token was issued. In unixtime seconds format.
+                  type:
+                    type: string
+                    enum:
+                      - normal
+                      - admin
               example:
                 username: example-user
                 email: user@example.com
-                iat: 1627758085
+                type: normal
         '406':
-          description: Bad token
+          description: Bad token or username encoded in the token was not found in database. (i.e. username has been changed or removed after the token was issued.)
   
   /register:
     post:
