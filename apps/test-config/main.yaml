@@ -1,7 +1,9 @@
 version: '3.7'
 
 networks:
-    apps-test:
+    default:
+        external:
+            name: apps-test
 
 services:
     apps:
@@ -14,8 +16,7 @@ services:
             POSTGRES_HOST: apps-db
             POSTGRES_PASSWORD: cake
             POSTGRES_USER: cake
-            TEST_ADMIN_PASS: admin
+            TEST_ADMIN_PASSWORD: admin
             TEST_ADMIN_USERNAME: admin
             USER_CODE_PATH: /USER_CODE
-        networks:
-            - apps-test
+        tty: true

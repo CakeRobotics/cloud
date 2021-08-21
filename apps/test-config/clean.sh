@@ -1,5 +1,3 @@
 #!/bin/sh
-docker-compose -f main.bridge.yaml stop
-docker-compose -f dependencies.base.yaml stop
-docker-compose -f main.bridge.yaml down
-docker-compose -f dependencies.base.yaml -f dependencies.bridge.yaml down
+docker-compose -f main.yaml down --remove-orphans
+docker-compose -f dependencies.yaml down --remove-orphans

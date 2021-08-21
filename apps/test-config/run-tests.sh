@@ -9,14 +9,14 @@ cd ${CWD}
 
 docker-compose -f dependencies.yaml up -d
 
+sleep 10
+
 set +e
 docker-compose -f main.yaml up --build --exit-code-from ${SERVICE_NAME}
 EXITCODE=$?
 
 set -e
-docker-compose -f main.yaml stop
-docker-compose -f dependencies.yaml stop
-docker-compose -f main.yaml down
-docker-compose -f dependencies.yaml down
+docker-compose -f main.yaml down --remove-orphans
+docker-compose -f dependencies.yaml down --remove-orphans
 
 exit ${EXITCODE}

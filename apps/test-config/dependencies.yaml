@@ -1,7 +1,9 @@
 version: '3.7'
 
 networks:
-    apps-test:
+    default:
+        name: apps-test
+        driver: bridge
 
 services:
     apps-db:
@@ -10,8 +12,6 @@ services:
             POSTGRES_DB: apps
             POSTGRES_USER: cake
             POSTGRES_PASSWORD: cake
-        networks:
-            - apps-test
         ports:
             - 127.0.0.1:5432:5432
 
@@ -29,8 +29,6 @@ services:
             ADMIN_EMAIL: admin@example.com
         depends_on:
             - auth-db
-        networks:
-            - apps-test
         ports:
             - 127.0.0.1:5005:8000
 
@@ -40,5 +38,3 @@ services:
             POSTGRES_USER: cake
             POSTGRES_PASSWORD: cake
             POSTGRES_DB: auth
-        networks:
-            - apps-test
