@@ -12,7 +12,7 @@ pipeline {
             set +x
             echo "Using ${USERNAME}:*****"
             TEMPFILE=$(mktemp)
-            curl -o ${TEMPFILE} -H "Authorization: Bearer ${TOKEN}" -F "file=@${WORKSPACE}/docs/openapi.yaml" https://utils.france-1.servers.cakerobotics.com/publish-api-doc/apps
+            curl -o ${TEMPFILE} -H "Authorization: Bearer ${TOKEN}" -F "openapi.yaml=@${WORKSPACE}/docs/openapi.yaml" https://utils.france-1.servers.cakerobotics.com/publish-api-doc/apps
             cat ${TEMPFILE} | grep Success
             set -x
             '''
