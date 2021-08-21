@@ -1,0 +1,280 @@
+openapi: "3.0.0"
+info:
+  description: "This service provides an API for creating and managing robot applications. The service can be used to push and pull code to the git backend, make versions, etc."
+  version: "1.0.0"
+  title: "Cake Apps Service"
+  termsOfService: "https://cakerobotics.com/terms/"
+  contact:
+    email: "support@cakerobotics.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "https://cloud.cakerobotics.com/api/apps"
+components:
+  securitySchemes:
+    adminUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    normalUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    App:
+      type: object
+      properties:
+        name:
+          type: string
+        lastCodeChange:
+          type: string
+          description: In unix-time seconds format.
+    Code:
+      type: string
+      example: |
+        import Cake
+        class MyRobot:
+          def init():
+            pass
+          def loop():
+            pass
+    Dependency:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - pip
+        key:
+          type: string
+  examples:
+    app:
+      summary: An example app
+      value:
+        name: my-project
+        lastCodeChange: "2021-08-17T19:14:41.691Z"
+    apps:
+      summary: Example apps list
+      value:
+        - name: my-latest-project
+          lastCodeChange: "2021-08-17T19:14:41.691Z"
+        - name: my-cool-project
+          lastCodeChange: "2021-08-16T18:35:50.277Z"
+    dependencies:
+      summary: Example dependencies
+      value:
+        - type: pip
+          name: numpy
+        - type: pip
+          name: scipy
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      schema:
+        type: string
+        example: alice-k4
+    app:
+      name: app
+      in: path
+      required: true
+      schema:
+        type: string
+        example: cool-app
+  responses:
+    unauthorized:
+      description: |
+            Unauthorized for one of the following reasons:
+            - Authorization header is empty or not in "Bearer {token}" format
+            - Authorization token is invalid
+            - Authorization token is valid but access is denied; only admin users can access apps that belong to other users.
+paths:
+  /{username}:
+    get:
+      summary: List all the apps that belong to a user
+      operationId: getUserApps
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+      responses:
+        '200':
+          description: List of all the apps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/App"
+              examples:
+                apps:
+                  "$ref": "#/components/examples/apps"
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+
+  /{username}/{app}:
+    get:
+      summary: Get app metadata
+      operationId: getApp
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/app"
+      responses:
+        '200':
+          description: List of all the apps
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/App"
+              examples:
+                app:
+                  "$ref": "#/components/examples/app"
+        '404':
+          description: App not found.
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+    post:
+      summary: Create an app
+      operationId: createApp
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/app"
+      responses:
+        '201':
+          description: App was created.
+        '400':
+          description: Invalid name.
+        '409':
+          description: An app with the same name already exists.
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+    delete:
+      summary: Delete an app
+      operationId: deleteApp
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/app"
+      responses:
+        '200':
+          description: App was deleted.
+        '404':
+          description: App not found.
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+  
+  /{username}/{app}/code:
+    get:
+      summary: Get the source code of an app
+      operationId: getCode
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/app"
+      responses:
+        '200':
+          description: App's main.py source code
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Code"
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+    put:
+      summary: Update the source of an app
+      operationId: putCode
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/app"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  "$ref": "#/components/schemas/Code"
+      responses:
+        '200':
+          description: Code was updated.
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+
+  /{username}/{app}/dependencies:
+    get:
+      summary: Get the dependencies of an app
+      operationId: getDependencies
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/app"
+      responses:
+        '200':
+          description: Returns dependencies object.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Dependency"
+              examples:
+                dependencies:
+                  "$ref": "#/components/examples/dependencies"
+        '400':
+          description: Project not found.
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+    put:
+      summary: Update the dependencies of an app.
+      operationId: updateDependencies
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/app"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                "$ref": "#/components/schemas/Dependency"
+            examples:
+              dependencies:
+                "$ref": "#/components/examples/dependencies"
+      responses:
+        '200':
+          description: Dependencies were updated.
+        '400':
+          description: Project not found.
+        '401':
+          "$ref": "#/components/responses/unauthorized"
+  /health:
+    get:
+      summary: Used to check service health
+      description: If the node is healthy, it returns a 200 response.
+      operationId: health
+      responses:
+        '200':
+          description: Service can respond.
