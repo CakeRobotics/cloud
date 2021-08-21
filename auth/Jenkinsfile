@@ -22,7 +22,7 @@ pipeline {
             set +x
             echo "Using ${USERNAME}:*****"
             TEMPFILE=$(mktemp)
-            curl -o ${TEMPFILE} -H "Authorization: Bearer ${TOKEN}" -F "file=@${WORKSPACE}/docs/index.html" https://utils.france-1.servers.cakerobotics.com/publish-api-doc/auth
+            curl -o ${TEMPFILE} -H "Authorization: Bearer ${TOKEN}" -F "index.html=@${WORKSPACE}/docs/index.html" https://utils.france-1.servers.cakerobotics.com/publish-api-doc/auth
             cat ${TEMPFILE} | grep Success
             set -x
             '''
