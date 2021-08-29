@@ -8,7 +8,7 @@ const initPromise = init();
 const port = 8000;
 const server = app.listen(port, async function() {
     await initPromise;
-    console.log(`Auth service started on port ${port}`);
+    console.log(`Apps service started on port ${port}`);
 });
 
 module.exports = {
