@@ -4,6 +4,7 @@ volumes:
     apps-db:
     auth-db:
     templates-db:
+    projects-db:
     user-code:
 
 services:
@@ -107,5 +108,35 @@ services:
         restart: always
         volumes:
             - templates-db:/data/db
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    projects:
+        image: images.cakerobotics.com/mostafa/projects:latest
+        container_name: cake-projects
+        depends_on:
+            - projects-db
+            - auth
+        environment:
+            MONGO_HOST: projects-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: ${PROJECTS_MONGO_PASSWORD}
+            AUTH_SERVICE: http://auth:8000
+            TEMPLATES_SERVICE: http://templates:8000
+        restart: always
+        volumes:
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    projects-db:
+        image: mongo
+        container_name: cake-projects-db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: ${PROJECTS_MONGO_PASSWORD}
+        restart: always
+        volumes:
+            - projects-db:/data/db
             - /etc/timezone:/etc/timezone:ro
             - /etc/localtime:/etc/localtime:ro
