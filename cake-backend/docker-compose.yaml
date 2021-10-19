@@ -1,7 +1,6 @@
 version: '3.7'
 
 volumes:
-    apps-db:
     auth-db:
     templates-db:
     projects-db:
@@ -16,38 +15,6 @@ services:
         restart: always
         volumes:
             - ./nginx.conf:/etc/nginx/nginx.conf:ro
-
-    apps:
-        image: images.cakerobotics.com/mostafa/apps:latest
-        container_name: cake-apps
-        depends_on:
-            - apps-db
-            - auth
-        environment:
-            POSTGRES_HOST: apps-db
-            POSTGRES_USER: cake
-            POSTGRES_PASSWORD: ${APPS_POSTGRES_PASSWORD}
-            POSTGRES_DB: apps
-            AUTH_SERVICE: http://auth:8000
-            USER_CODE_PATH: /USER_CODE
-        restart: always
-        volumes:
-            - user-code:/USER_CODE
-            - /etc/timezone:/etc/timezone:ro
-            - /etc/localtime:/etc/localtime:ro
-
-    apps-db:
-        image: postgres
-        container_name: cake-apps-db
-        environment:
-            POSTGRES_USER: cake
-            POSTGRES_PASSWORD: ${APPS_POSTGRES_PASSWORD}
-            POSTGRES_DB: apps
-        restart: always
-        volumes:
-            - apps-db:/var/lib/postgresql/data
-            - /etc/timezone:/etc/timezone:ro
-            - /etc/localtime:/etc/localtime:ro
 
     auth:
         image: images.cakerobotics.com/mostafa/auth:latest
