@@ -2,8 +2,9 @@ version: '3.7'
 
 volumes:
     auth-db:
-    templates-db:
     projects-db:
+    sim-db:
+    templates-db:
     user-code:
 
 services:
@@ -76,6 +77,37 @@ services:
         restart: always
         volumes:
             - projects-db:/data/db
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    sim:
+        image: images.cakerobotics.com/mostafa/sim:latest
+        container_name: cake-sim
+        depends_on:
+            - sim-db
+            - auth
+        environment:
+            MONGO_HOST: sim-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: ${SIM_MONGO_PASSWORD}
+            AUTH_SERVICE: http://auth:8000
+            PROJECTS_SERVICE: http://projects:8000
+        restart: always
+        volumes:
+            - "/home/mostafa/.arvan:/root/.arvan:ro"
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    sim-db:
+        image: mongo
+        container_name: cake-sim-db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: ${SIM_MONGO_PASSWORD}
+        restart: always
+        volumes:
+            - sim-db:/data/db
             - /etc/timezone:/etc/timezone:ro
             - /etc/localtime:/etc/localtime:ro
 
