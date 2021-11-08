@@ -2,20 +2,16 @@ import logo from '../img/logo.svg';
 import './Navbar.css';
 
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import getUsername from '../functions/getUsername';
 
 const PUBLIC_URL = process.env.PUBLIC_URL || "";
 
 class PanelNavbar extends Component {
-    state = {
-        username: '',
-    }
-    async componentDidMount() {
-        const username = await getUsername();
-        this.setState({ username });
-    }
-    render() { 
+    render() {
+        const currentPath = this.props.location.pathname; // e.g. "/projects"
+        const currentPage = currentPath.split('/')[1];
         return (
             <Navbar bg="dark" variant="dark">
                 <Container>
@@ -29,26 +25,29 @@ class PanelNavbar extends Component {
                     />{' Cake Robotics'}
                     </Navbar.Brand>
                     <Nav className="flex-grow-1 ms-3"
-                        activeKey={this.props.currentPage}
+                        activeKey={currentPage}
                         onSelect={(selectedKey) => console.log(`Nav ${selectedKey}`)}
                         >
                         <Nav.Item>
-                            <Nav.Link eventKey="/projects" href={`${PUBLIC_URL}/projects`}>Projects</Nav.Link>
+                            <Nav.Link eventKey="projects" href={`${PUBLIC_URL}/projects`}>Projects</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="/robots" href={`${PUBLIC_URL}/robots`}>Robots</Nav.Link>
+                            <Nav.Link eventKey="templates" href={`${PUBLIC_URL}/templates`}>Templates</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="/robots" href={`${PUBLIC_URL}/robots`}>Simulations</Nav.Link>
+                            <Nav.Link eventKey="devices" href={`${PUBLIC_URL}/devices`}>Devices</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="simulations" href={`${PUBLIC_URL}/simulations`}>Simulations</Nav.Link>
                         </Nav.Item>
                         <div className="navbar-vline"/>
                         <Nav.Item>
-                            <Nav.Link eventKey="/docs/tutorials" href={`${PUBLIC_URL}/docs/tutorials`}>Tutorials</Nav.Link>
+                            <Nav.Link eventKey="tutorials" href={`${PUBLIC_URL}/docs/tutorials`}>Tutorials</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="/docs" href={`${PUBLIC_URL}/docs`}>Documentation</Nav.Link>
+                            <Nav.Link eventKey="docs" href={`${PUBLIC_URL}/docs`}>Documentation</Nav.Link>
                         </Nav.Item>
-                        <NavDropdown title={this.state.username} className="ms-auto">
+                        <NavDropdown title={this.props.username || 'Loading...'} className="ms-auto">
                             <NavDropdown.Item href="/auth/settings">Settings</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="/auth/logout">Logout</NavDropdown.Item>
@@ -59,5 +58,13 @@ class PanelNavbar extends Component {
         );
     }
 }
- 
-export default PanelNavbar;
+
+const mapStateToProps = function(state) {
+    return {
+        username: state.username,
+    }
+}
+
+const ReduxPanelNavbar = connect(mapStateToProps)(PanelNavbar);
+
+export default withRouter(ReduxPanelNavbar);

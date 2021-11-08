@@ -1,35 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Col, Row, Button, Spinner } from 'react-bootstrap';
-import { Save } from 'react-bootstrap-icons';
-import { formatDistanceToNow } from 'date-fns';
+import { Check, Save } from 'react-bootstrap-icons';
+import { withRouter } from 'react-router-dom';
 
 import { dispatch } from '../../../redux/store';
 import loadInfo from './functions/loadInfo';
-import saveCode from './functions/saveCode';
+import saveProps from './functions/saveProps';
 
 class Panel extends Component {
-    componentDidMount() {
-        this.automaticUpdate();
-    }
-
-    // This function is used to update "last saved x mins ago"
-    automaticUpdate() {
-        this.forceUpdate();
-        var timeout = 5000;
-        if (this.props.info && (this.props.info.lastChange - new Date()) > 60000 ) {
-            timeout = 60000;
-        }
-        setTimeout(this.automaticUpdate.bind(this), timeout);
-    }
-
-    async saveCode_() {
+    async saveProps_() {
         dispatch({
             type: 'SET_EDITOR_STATE',
             payload: 'SAVING',
         });
         try {
-            await saveCode();
+            await saveProps();
         } catch (error) {
             dispatch({
                 type: 'SET_EDITOR_STATE',
@@ -58,29 +44,27 @@ class Panel extends Component {
         dispatch({
             type: 'ADD_TOAST',
             payload: {
-                title: "Code saved in cloud.",
+                title: "Props saved in cloud.",
                 color: "SUCCESS",
                 time: new Date(),
             }
-        })
+        });
+        const projectId = this.props.match.params.projectId;
+        this.props.history.push(`/projects/${projectId}`)
     }
 
     render() {
-        const lastSaveDistance = this.props.info != null ? formatDistanceToNow(new Date(this.props.info.lastChange), {includeSeconds: true}) : "??";
-        const newChangesString = this.props.dirty ? "There are new changes" : "No new changes";
+        const firstTime = window.location.href.match(/firstTime/);
+        const buttonContent = firstTime ? <> Continue <Check/> </> : <> Save Props <Save/> </>;
         return (
             <Container className="sidebar-panel">
                 <Row>
                     <Col>
-                        <Button size="sm" onClick={this.saveCode_.bind(this)} disabled={this.props.pageState !== 'EDITING'}>
-                            Save Code <Save/>
+                        <Button variant="success" size="sm" onClick={this.saveProps_.bind(this)} disabled={this.props.pageState !== 'EDITING'}>
+                            {buttonContent}
                         </Button>
                     </Col>
                     <Col className="d-flex">
-                        <Container className="p-0" hidden={this.props.pageState === 'SAVING'}>
-                            <Row className="action-info-text">Last Save: {lastSaveDistance} ago</Row>
-                            <Row className="action-info-sub-text">{newChangesString}</Row>
-                        </Container>
                         <Spinner hidden={this.props.pageState !== 'SAVING'} animation="border" size="sm" className="m-auto"/>
                     </Col>
                 </Row>
@@ -99,4 +83,4 @@ const mapStateToProps = function(state) {
 
 const ReduxPanel = connect(mapStateToProps)(Panel);
 
-export default ReduxPanel;
+export default withRouter(ReduxPanel);

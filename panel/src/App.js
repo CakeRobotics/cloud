@@ -1,31 +1,45 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import '@fontsource/actor';
+// import '@fontsource/actor';
 
+import React, { Component } from 'react';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
+    Redirect,
 } from "react-router-dom";
 
+import init from './functions/init';
+
 import Navbar from './components/Navbar';
-import ListProjectsPage from './pages/projects/list-projects/Page';
-import EditProjectCodePage from './pages/projects/edit-project-code/Page';
+import Toasts from './components/Toasts';
+import ProjectsPage from './pages/projects';
+import TemplatesPage from './pages/templates';
 
-function App() {
-    return (
-        <Router basename={process.env.PUBLIC_URL}>
-            <Navbar currentPage="/projects" />
-            <Switch>
-                <Route path="/projects/:projectName">
-                    <EditProjectCodePage/>
-                </Route>
-                <Route path="/projects">
-                    <ListProjectsPage/>
-                </Route>
-            </Switch>
-        </Router>
-    );
+
+const initPromise = init();
+
+class App extends Component {
+    render() { 
+        return (
+            <Router basename={process.env.PUBLIC_URL}>
+                <Navbar currentPage="/projects" />
+                <Toasts/>
+                <Switch>
+                    <Route path="/projects">
+                        <ProjectsPage/>
+                    </Route>
+                    <Route path="/templates">
+                        <TemplatesPage/>
+                    </Route>
+                    <Route path="/">
+                        <Redirect to="/projects"/>
+                    </Route>
+                </Switch>
+            </Router>
+        );
+    }
 }
-
-export default App;
+ 
+export { App, initPromise };

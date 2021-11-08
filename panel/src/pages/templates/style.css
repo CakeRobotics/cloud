@@ -1,0 +1,6 @@
+.template-thumbnail {
+    width: 12em;
+    height: 8em;
+    object-fit: cover;
+    border-radius: 3px;
+}

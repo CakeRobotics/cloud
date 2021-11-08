@@ -1,0 +1,23 @@
+.inline-circle {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    border-radius: 50%;
+    margin-left: 0.25em;
+}
+
+.inline-circle-green {
+    background-color: green;
+}
+
+.inline-circle-blue {
+    background-color: blue;
+}
+
+.inline-circle-yellow {
+    background-color: rgb(196, 183, 0);
+}
+
+.inline-circle-black {
+    background-color: #777;
+}

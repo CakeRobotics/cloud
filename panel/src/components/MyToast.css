@@ -1,0 +1,16 @@
+.toast-header {
+    color: white;
+    background-color: var(--bs-secondary);
+}
+
+.toast-header .text-muted {
+    color: #ffffffee !important;
+}
+
+.toast-success .toast-header {
+    background-color: var(--bs-success);
+}
+
+.toast-error .toast-header {
+    background-color: var(--bs-danger);
+}
