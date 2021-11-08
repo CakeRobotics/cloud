@@ -1,0 +1,255 @@
+openapi: "3.0.0"
+info:
+  description: |
+    This service provides an API for creating and managing robot *projects*.
+    
+    A *project* is a data object that describes a robot programming project. It includes metadata (project name, owner, etc.), the hardware on the robot (description of sensors, actuators, etc. with their geometrical information, drivers etc.), and the software (code, library dependencies, etc.) For example, "My smart cleaner" is a project. A project is self-contained and can be converted to a docker container to be used on a physical device.
+
+  version: "1.0.0"
+  title: "Cake Projects Service"
+  termsOfService: "https://cakerobotics.com/terms/"
+  contact:
+    email: "support@cakerobotics.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "http://cloud.cakerobotics.com/api/projects"
+
+components:
+  securitySchemes:
+    adminUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    normalUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ProjectCompact:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        last_code_change:
+          type: string
+    props.json:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        TBD:
+          type: string
+
+  examples:
+    ProjectCompactArray:
+      summary: A list of templates
+      value:
+        - _id: "7f426d2d-2dd2-4398-b2b4-b30c88de527f"
+          name: Three-wheeled with Lidar
+          last_code_change: "2020-03-19T07:22Z"
+        - _id: "a139086cc3636323a3ec7b5b"
+          name: Three-wheeled with Camera
+          last_code_change: "2020-01-19T07:22Z"
+    Props:
+      value:
+        name: My Robot
+        description: This is a ground robot with three wheels, and a single RGB camera.
+        params:
+          - key: width
+            description: Width (m)
+            category: Geometry
+            image: "h00HUvFdXDjmnuClzd"
+            value: 0.6
+          - key: camera-fov
+            description: Camera FOV (deg)
+            category: Sensors
+            value: 0.2
+    Code:
+      value: |
+        import Cake
+
+        class MyRobot:
+          def init(self):
+            pass
+
+          def loop(self):
+            pass
+  parameters:
+    project:
+      name: project
+      description: Project _id
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "a139086cc3636323a3ec7b5b"
+    username:
+      name: username
+      in: path
+      required: true
+      schema:
+        type: string
+        example: alice-k4
+    file:
+      name: file
+      description: File name. Only "props.json" and "main.py" are valid for now. "props.json" contains all the information needed to display projects page in UI.
+      in: path
+      required: true
+      schema:
+        type: string
+        example: props.json
+  responses:
+    unauthorized:
+      description: |
+            Unauthorized for one of the following reasons:
+            - Authorization header is empty or not in "Bearer {token}" format
+            - Authorization token is invalid
+            - Authorization token is valid but access is denied; only admin users can access apps that belong to other users.
+
+paths:
+  /{username}:
+    get:
+      summary: List all the projects that belong to a user
+      description: Ordered by more recent first
+      tags: [Projects]
+      operationId: getProjects
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+      responses:
+        '200':
+          description: List of the projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/ProjectCompact"
+              examples:
+                Projects:
+                  "$ref": "#/components/examples/ProjectCompactArray"
+    post:
+      summary: Create a project
+      tags: [Projects]
+      operationId: createProject
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                template_id:
+                  type: string
+              example:
+                template_id: "a139086cc3636323a3ec7b5b"
+      responses:
+        '209':
+          description: Project added.
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Project _id
+                example: "a139086cc3636323a3ec7b5b"
+        '400':
+          description: Invalid project structure.
+        '404':
+          description: Template not found.
+  /{username}/{project}:
+    delete:
+        summary: Delete a project
+        tags: [Projects]
+        operationId: deleteProject
+        security:
+          - adminUser: []
+        parameters:
+          - "$ref": "#/components/parameters/username"
+          - "$ref": "#/components/parameters/project"
+        responses:
+          '200':
+            description: Project deleted.
+          '404':
+            description: _id lookup returned empty.
+  /{username}/{project}/{file}:
+    get:
+      summary: Get a file
+      description: |
+        Use "props.json" file for project info.
+
+        Use "main.py" file for project code.
+      tags: [Projects]
+      operationId: getFile
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/project"
+        - "$ref": "#/components/parameters/file"
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                props.json:
+                  "$ref": "#/components/examples/Props"
+                main.py:
+                  "$ref": "#/components/examples/Code"
+        '400':
+          description: Bad _id format.
+        '404':
+          description: Project or file not found.
+    put:
+      summary: Modify a file
+      description: |
+        Use "props.json" file for project info.
+
+        Use "main.py" file for project code.
+      tags: [Projects]
+      operationId: putFile
+      security:
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/username"
+        - "$ref": "#/components/parameters/project"
+        - "$ref": "#/components/parameters/file"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+            examples:
+              props.json:
+                "$ref": "#/components/examples/Props"
+              main.py:
+                "$ref": "#/components/examples/Code"
+      responses:
+        '200':
+          description: Props updated.
+        '400':
+          description: Bad _id format.
+        '404':
+          description: Project or file doesn't exist.
+
+  /health:
+    get:
+      summary: Get service health state
+      tags: [Misc]
+      responses:
+        '200':
+          description: Healthy
