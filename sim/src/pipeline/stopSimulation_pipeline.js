@@ -7,6 +7,7 @@ const stopSimulation_pipeline = async (simulationId) => {
         `jobs/sim-${simulationId}`,
         `services/sim-${simulationId}`,
         `routes/sim-${simulationId}`,
+        `routes/sim-${simulationId}-dash`,
     ];
     await spawnWithLogs({
         cmd: OC_CMD,

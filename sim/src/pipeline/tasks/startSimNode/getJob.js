@@ -78,6 +78,11 @@ const getJob = async (simulationObject, dockerImageName) => {
                             "name": "user-code",
                             "image": dockerImageName,
                             "imagePullPolicy": "Always",
+                            "ports": [
+                                {
+                                    "containerPort": 8888
+                                }
+                            ],
                             "securityContext": {
                                 "runAsUser": 0,
                                 "runAsGroup": 0,
