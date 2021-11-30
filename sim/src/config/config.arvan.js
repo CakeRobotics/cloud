@@ -28,7 +28,7 @@ const OC_FIXED_ARGS = [
 ];
 
 // Where to pull sim image from
-const SIM_IMAGE = `cakerobotics/sim:r15.2345ded-lite`;
+const SIM_IMAGE = `cakerobotics/sim:r23.922ef83-lite`;
 
 // cake-bundler executable (probably venv'd) FIXME: needs dockerfile
 const CAKE_BUNDLER = `${process.env.HOME}/dev/cake/core/sim/venv/bin/cake-bundler`
