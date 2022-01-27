@@ -17,7 +17,6 @@ const formatSimulation = (simulation) => {
             ...obj,
             duration: (new Date()).getTime() - (new Date(simulation.startTime)).getTime(),
             url: simulation.url,
-            dashboardUrl: simulation.dashboardUrl,
         }
     } else if (simulation.state.match('stopped')) {
         obj = {

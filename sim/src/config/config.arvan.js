@@ -1,16 +1,11 @@
 // Openshift commandline entrypoint
 const OC_CMD = "oc";
 
-// List of available domains. Make sure they CNAME to default-gateway.ir-thr-at1.arvan.run.
+// List of available domains. Make sure they resolve to $(minishift ip)
 const NODE_HOSTNAMES_POOL = [
     "node-1.sim.cakerobotics.com",
     "node-2.sim.cakerobotics.com",
     "node-3.sim.cakerobotics.com",
-];
-const DASHBOARD_HOSTNAMES_POOL = [
-    "dash-1.cakerobotics.com",
-    "dash-2.cakerobotics.com",
-    "dash-3.cakerobotics.com",
 ];
 
 // Whether or not the pod's resources should be explicitly claimed in the yaml
@@ -42,7 +37,6 @@ const CAKE_BUNDLER = `${process.env.HOME}/dev/cake/core/sim/venv/bin/cake-bundle
 module.exports = {
     OC_CMD,
     NODE_HOSTNAMES_POOL,
-    DASHBOARD_HOSTNAMES_POOL,
     DEFINE_RESOURCES,
     REGISTRY_INTERNAL_ADRESS,
     REGISTRY_INTERNAL_ADRESS,

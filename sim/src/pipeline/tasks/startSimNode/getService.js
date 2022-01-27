@@ -16,11 +16,6 @@ const getService = async (simulationObject) => {
                     "protocol": "TCP",
                     "port": 80,
                     "targetPort": 8080
-                }, {
-                    "name": "http-dash",
-                    "protocol": "TCP",
-                    "port": 8888,
-                    "targetPort": 8888
                 }
             ]
         }

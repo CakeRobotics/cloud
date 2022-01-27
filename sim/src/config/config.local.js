@@ -46,11 +46,6 @@ const NODE_HOSTNAMES_POOL = [
     "node-2.sim.minishift.local",
     "node-3.sim.minishift.local",
 ];
-const NODE_HOSTNAMES_POOL = [
-    "dash-1.sim.minishift.local",
-    "dash-2.sim.minishift.local",
-    "dash-3.sim.minishift.local",
-];
 
 // Whether or not the pod's resources should be explicitly claimed in the yaml
 const DEFINE_RESOURCES = false;
@@ -76,7 +71,6 @@ const CAKE_BUNDLER = `${process.env.HOME}/dev/cake/core/sim/venv/bin/cake-bundle
 module.exports = {
     OC_CMD,
     NODE_HOSTNAMES_POOL,
-    DASHBOARD_HOSTNAMES_POOL,
     DEFINE_RESOURCES,
     REGISTRY_INTERNAL_ADRESS,
     REGISTRY_INTERNAL_ADRESS,

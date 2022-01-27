@@ -58,15 +58,14 @@ router.post('/', async function(request, response) {
 
     // Start process
     try {
-        var { host, dashboardHost } = await startSimulation_pipeline(simulation);
+        var hostname = await startSimulation_pipeline(simulation);
         // Mark simulation as started, set the url
         await simulationsCollection().updateOne(
             { _id: simulationId },
             {
                 $set: {
                     state: "up",
-                    url: `http://${host}`,
-                    dashboardUrl: `http://${dashboardHost}`,
+                    url: `http://${hostname}`,
                     startTime: new Date(),
                 },
             }

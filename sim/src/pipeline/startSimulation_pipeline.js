@@ -6,9 +6,9 @@ const startSimulation_pipeline = async (baseSimulationObject) => {
     await storePipelineStep('build-app-image');
     const { dockerImageName, tmpWorkdir } = await buildAppImage(baseSimulationObject);
     await storePipelineStep('start-sim-node');
-    const { host, dashboardHost } = await startSimNode(baseSimulationObject, dockerImageName, tmpWorkdir);
+    const simulationHostname = await startSimNode(baseSimulationObject, dockerImageName, tmpWorkdir);
     await storePipelineStep('running');
-    return { host, dashboardHost };
+    return simulationHostname;
 }
 
 module.exports = startSimulation_pipeline;
