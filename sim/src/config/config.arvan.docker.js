@@ -7,6 +7,6 @@ config.OC_FIXED_ARGS = [
     config.OC_PROJECT,
 ];
 
-config.CAKE_BUNDLER = 'cake-bundler'
+config.PYTHON_EXEC = 'python3'
 
 module.exports = config;

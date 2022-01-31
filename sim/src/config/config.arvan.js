@@ -31,7 +31,7 @@ const OC_FIXED_ARGS = [
 const SIM_IMAGE = `cakerobotics/sim:r23.922ef83-lite`;
 
 // cake-bundler executable (probably venv'd) FIXME: needs dockerfile
-const CAKE_BUNDLER = `${process.env.HOME}/dev/cake/core/sim/venv/bin/cake-bundler`
+const PYTHON_EXEC = `python3` // $ source /home/mostafa/dev/cake/core/sim/venv/bin/activate
 
 
 module.exports = {
@@ -43,5 +43,5 @@ module.exports = {
     OC_PROJECT,
     OC_FIXED_ARGS,
     SIM_IMAGE,
-    CAKE_BUNDLER,
+    PYTHON_EXEC,
 }

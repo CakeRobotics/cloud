@@ -65,7 +65,7 @@ const OC_FIXED_ARGS = ["-n", OC_PROJECT];
 const SIM_IMAGE = `${REGISTRY_INTERNAL_ADRESS}/${OC_PROJECT}/sim:latest`;
 
 // cake-bundler executable (probably venv'd)
-const CAKE_BUNDLER = `${process.env.HOME}/dev/cake/core/sim/venv/bin/cake-bundler`
+const PYTHON_EXEC = `python3` // $ source /home/mostafa/dev/cake/core/sim/venv/bin/activate
 
 
 module.exports = {
@@ -77,5 +77,5 @@ module.exports = {
     OC_PROJECT,
     OC_FIXED_ARGS,
     SIM_IMAGE,
-    CAKE_BUNDLER,
+    PYTHON_EXEC,
 }
