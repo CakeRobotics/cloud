@@ -9,7 +9,7 @@
         "start": "node ./src/server.js",
         "test": "jest --runInBand --testTimeout=20000",
         "test-local": "export $(xargs < .env.test) && jest --runInBand --testTimeout=20000",
-        "test-local-pipeline": "export $(xargs < .env.test) && TEST_FULL=1 jest --runInBand --testTimeout=20000 fullPipeline"
+        "test-local-pipeline": "echo '*********MAKE SURE THE OTHER SIM SERVICE IN THE CLOUD IS NOT GARBAGE COLLECTING KUBE RESOURCES CREATED BY THIS TEST! STOP THAT ONE IF NEEDED.'; export $(xargs < .env.test) && TEST_FULL=1 jest --runInBand --testTimeout=20000 fullPipeline"
     },
     "dependencies": {
         "axios": "^0.23.0",
