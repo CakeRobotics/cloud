@@ -50,11 +50,6 @@ const NODE_HOSTNAMES_POOL = [
 // Whether or not the pod's resources should be explicitly claimed in the yaml
 const DEFINE_RESOURCES = false;
 
-// OKD integrated docker registry address in ip:port format (Accessible within the cluster)
-// = $(minishift openshift registry)
-// FIXME with dns: docker-registry.default.svc
-const REGISTRY_INTERNAL_ADRESS = "172.30.1.1:5000";
-
 // OC Project (Namespace)
 const OC_PROJECT = "myproject";
 
@@ -72,8 +67,6 @@ module.exports = {
     OC_CMD,
     NODE_HOSTNAMES_POOL,
     DEFINE_RESOURCES,
-    REGISTRY_INTERNAL_ADRESS,
-    REGISTRY_INTERNAL_ADRESS,
     OC_PROJECT,
     OC_FIXED_ARGS,
     SIM_IMAGE,

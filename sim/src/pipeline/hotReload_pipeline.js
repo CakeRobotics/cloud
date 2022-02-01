@@ -2,16 +2,12 @@ const { OC_CMD, OC_FIXED_ARGS } = require("../config");
 const get = require("../utils/openshift/get");
 const pushLog = require("../utils/pushLog");
 const spawnWithLogs = require('../utils/spawnWithLogs');
-const storeUserCodeInTempDir = require("./tasks/buildAppImage/storeUserCodeInTempDir");
 
 const hotReload_pipeline = async (newSimulationObject) => {
     const simulationId = newSimulationObject._id;
 
     // Push logs
     await pushLog(simulationId, 'hot-reload', 'Reloading...');
-
-    // Store new code
-    const appPath = await storeUserCodeInTempDir(newSimulationObject);
 
     // Find pod name
     const [ pod ] = await get(['pods', '-l', `app=sim-${simulationId}`]);
@@ -46,7 +42,8 @@ const hotReload_pipeline = async (newSimulationObject) => {
         args: [...OC_FIXED_ARGS, 'exec', `pods/${pod.name}`, '-c', 'user-code', '--',
             'nohup', '/bin/bash', '-c',
             `source /ros_entrypoint.sh
-            python3 -u /app/main.py > /app/stdout 2>&1 &
+            cd /app
+            bash /crl/docker/dev/main.bash > /app/stdout 2>&1 &
             exit`
         ],
         spawnOptions: { timeout: 60_000 },

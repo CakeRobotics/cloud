@@ -13,10 +13,11 @@ router.use(express.json());
 router.post('/', async function(request, response) {
     const { projectId, world } = request.body;
     var projectFiles = {}
+    var projectEndpoint = '';
     // Fetch project
     try {
         const headers = { Authorization: `Bearer ${response.locals.auth_token}` };
-        const projectEndpoint = `${process.env.PROJECTS_SERVICE}/${response.locals.user.username}/${projectId}`;
+        projectEndpoint = `${process.env.PROJECTS_SERVICE}/${response.locals.user.username}/${projectId}`;
 
         const propsResponse = await axios.get(`${projectEndpoint}/props.json`, { headers });
         projectFiles.props = propsResponse.data;
@@ -35,7 +36,7 @@ router.post('/', async function(request, response) {
     const simulation = {
         creationDate: new Date(),
         owner: response.locals.user.username,
-        projectFiles,
+        projectUrl: projectEndpoint,
         projectId,
         state: "starting",
         step: "storing-new-simulation",
@@ -58,7 +59,8 @@ router.post('/', async function(request, response) {
 
     // Start process
     try {
-        var hostname = await startSimulation_pipeline(simulation);
+        const authHeader = `Bearer ${response.locals.auth_token}`;
+        var hostname = await startSimulation_pipeline(simulation, authHeader);
         // Mark simulation as started, set the url
         await simulationsCollection().updateOne(
             { _id: simulationId },

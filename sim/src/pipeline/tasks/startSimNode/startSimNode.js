@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const apply = require("../../../utils/openshift/apply");
 const getJob = require("./getJob");
 const getRoute = require("./getRoute");
@@ -6,8 +8,10 @@ const waitForNodeStart = require("./waitForNodeStart");
 const pushLog = require('../../../utils/pushLog');
 const delete_ = require("../../../utils/openshift/delete_");
 
-const startSimNode = async (baseSimulationObject, dockerImageName, tmpWorkdir) => {
-    const jobObject = await getJob(baseSimulationObject, dockerImageName);
+const startSimNode = async (baseSimulationObject, authHeader) => {
+    const tmpWorkdir = `/tmp/sim-${baseSimulationObject._id}`;
+    await fs.promises.mkdir(tmpWorkdir, { recursive: true });
+    const jobObject = await getJob(baseSimulationObject, authHeader);
     const serviceObject = await getService(baseSimulationObject);
     const { host, routeObject } = await getRoute(baseSimulationObject);
     await apply([jobObject, serviceObject, routeObject], tmpWorkdir, baseSimulationObject._id);

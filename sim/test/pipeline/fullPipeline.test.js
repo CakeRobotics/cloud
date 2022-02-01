@@ -18,12 +18,7 @@ test('fullPipeline', async function() {
         return;
     }
     const simulationObject = {
-        projectFiles: {
-            props: {},
-            mainfile: "print('TEST_LOG')",
-            state: "starting"
-        },
-        world: "/usr/share/gazebo-11/worlds/cafe.world",
+        projectUrl: 'https://raw.githubusercontent.com/CakeRobotics/crl/main/examples/__misc__/simple_log',
     }
 
     await initDatabaseConnection();
@@ -31,7 +26,7 @@ test('fullPipeline', async function() {
 
     // START
     const routesBefore = await get('routes')
-    const simulationHostname = await startSimulation_pipeline(simulationObject);
+    const simulationHostname = await startSimulation_pipeline(simulationObject, '');
     const routesAfter = await get('routes')
 
     expect(routesAfter.length).toEqual(routesBefore.length + 1);

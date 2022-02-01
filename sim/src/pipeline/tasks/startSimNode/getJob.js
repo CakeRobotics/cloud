@@ -1,6 +1,6 @@
 const { DEFINE_RESOURCES, SIM_IMAGE } = require('../../../config');
 
-const getJob = async (simulationObject, dockerImageName) => {
+const getJob = async (simulationObject, authHeader) => {
     const simulationId = simulationObject._id;
     const jobName = `sim-${simulationId}`;
     const simResources = DEFINE_RESOURCES && {
@@ -76,18 +76,29 @@ const getJob = async (simulationObject, dockerImageName) => {
                         },
                         {
                             "name": "user-code",
-                            "image": dockerImageName,
+                            "image": "cakerobotics/crl-dev",
                             "imagePullPolicy": "Always",
                             "securityContext": {
                                 "runAsUser": 0,
                                 "runAsGroup": 0,
                                 "fsGroup": 0
                             },
+                            env: [
+                                {
+                                    name: 'PROJECT_URL',
+                                    value: simulationObject.projectUrl,
+                                },
+                                {
+                                    name: 'AUTH_HEADER',
+                                    value: authHeader,
+                                },
+                            ],
                             "command": ["/bin/bash", "-c", "--"],
                             "args": [
                                 `source /ros_entrypoint.sh
+                                cd /app
                                 mkfifo /app/stdout
-                                bash -c "python3 -u /app/main.py > /app/stdout 2>&1 ; echo Robot application closed with exit code $? > /app/stdout" &
+                                bash -c "bash /crl/docker/dev/main.bash > /app/stdout 2>&1 ; echo Robot application closed with exit code $? > /app/stdout" &
                                 bash -c "while true; do sleep 80; echo __KEEPALIVE__ > /app/stdout; done;" &
                                 while true; do cat /app/stdout; done;`
                             ], // Reason: if a container within the pod closes, kubernetes stops routing to that pod.

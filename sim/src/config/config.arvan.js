@@ -11,11 +11,6 @@ const NODE_HOSTNAMES_POOL = [
 // Whether or not the pod's resources should be explicitly claimed in the yaml
 const DEFINE_RESOURCES = true;
 
-// OKD integrated docker registry address in ip:port format (Accessible within the cluster)
-// const REGISTRY_INTERNAL_ADRESS = "user-registry-test-1.apps.ir-thr-at1.arvan.run";
-const REGISTRY_INTERNAL_ADRESS = "user-images.cakerobotics.com";
-// NOTE: Maybe remove public route and use "user-images.test-1.svc"
-
 // OC Project (Namespace)
 const OC_PROJECT = "test-1";
 
@@ -38,8 +33,6 @@ module.exports = {
     OC_CMD,
     NODE_HOSTNAMES_POOL,
     DEFINE_RESOURCES,
-    REGISTRY_INTERNAL_ADRESS,
-    REGISTRY_INTERNAL_ADRESS,
     OC_PROJECT,
     OC_FIXED_ARGS,
     SIM_IMAGE,

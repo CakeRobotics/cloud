@@ -1,12 +1,9 @@
 const storePipelineStep = require('../utils/storePipelineStep');
-const buildAppImage = require('./tasks/buildAppImage/buildAppImage');
 const startSimNode = require('./tasks/startSimNode/startSimNode');
 
-const startSimulation_pipeline = async (baseSimulationObject) => {
-    await storePipelineStep('build-app-image');
-    const { dockerImageName, tmpWorkdir } = await buildAppImage(baseSimulationObject);
+const startSimulation_pipeline = async (baseSimulationObject, authHeader) => {
     await storePipelineStep('start-sim-node');
-    const simulationHostname = await startSimNode(baseSimulationObject, dockerImageName, tmpWorkdir);
+    const simulationHostname = await startSimNode(baseSimulationObject, authHeader);
     await storePipelineStep('running');
     return simulationHostname;
 }
