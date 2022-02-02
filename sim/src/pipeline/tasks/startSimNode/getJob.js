@@ -86,7 +86,7 @@ const getJob = async (simulationObject, authHeader) => {
                             env: [
                                 {
                                     name: 'PROJECT_URL',
-                                    value: simulationObject.projectUrl,
+                                    value: simulationObject.projectUrlPublic,
                                 },
                                 {
                                     name: 'AUTH_HEADER',

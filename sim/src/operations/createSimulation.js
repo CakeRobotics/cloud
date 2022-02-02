@@ -13,11 +13,12 @@ router.use(express.json());
 router.post('/', async function(request, response) {
     const { projectId, world } = request.body;
     var projectFiles = {}
-    var projectEndpoint = '';
+    var projectEndpointPublic = '';
     // Fetch project
     try {
         const headers = { Authorization: `Bearer ${response.locals.auth_token}` };
-        projectEndpoint = `${process.env.PROJECTS_SERVICE}/${response.locals.user.username}/${projectId}`;
+        const projectEndpoint = `${process.env.PROJECTS_SERVICE}/${response.locals.user.username}/${projectId}`;
+        projectEndpointPublic = `${process.env.PROJECTS_SERVICE_PUBLIC}/${response.locals.user.username}/${projectId}`;
 
         const propsResponse = await axios.get(`${projectEndpoint}/props.json`, { headers });
         projectFiles.props = propsResponse.data;
@@ -36,7 +37,7 @@ router.post('/', async function(request, response) {
     const simulation = {
         creationDate: new Date(),
         owner: response.locals.user.username,
-        projectUrl: projectEndpoint,
+        projectUrlPublic: projectEndpointPublic,
         projectId,
         state: "starting",
         step: "storing-new-simulation",
