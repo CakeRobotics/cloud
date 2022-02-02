@@ -59,6 +59,9 @@ const OC_FIXED_ARGS = ["-n", OC_PROJECT];
 // Where to pull sim image from
 const SIM_IMAGE = `${REGISTRY_INTERNAL_ADRESS}/${OC_PROJECT}/sim:latest`;
 
+// Where to pull crl image from
+const CRL_DEV_IMAGE = `cakerobotics/crl-dev:latest`;
+
 // cake-bundler executable (probably venv'd)
 const PYTHON_EXEC = `python3` // $ source /home/mostafa/dev/cake/core/sim/venv/bin/activate
 
@@ -70,5 +73,6 @@ module.exports = {
     OC_PROJECT,
     OC_FIXED_ARGS,
     SIM_IMAGE,
+    CRL_DEV_IMAGE,
     PYTHON_EXEC,
 }

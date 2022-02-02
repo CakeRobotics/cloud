@@ -1,4 +1,4 @@
-const { DEFINE_RESOURCES, SIM_IMAGE } = require('../../../config');
+const { DEFINE_RESOURCES, SIM_IMAGE, CRL_DEV_IMAGE } = require('../../../config');
 
 const getJob = async (simulationObject, authHeader) => {
     const simulationId = simulationObject._id;
@@ -76,7 +76,7 @@ const getJob = async (simulationObject, authHeader) => {
                         },
                         {
                             "name": "user-code",
-                            "image": "cakerobotics/crl-dev",
+                            "image": CRL_DEV_IMAGE,
                             "imagePullPolicy": "Always",
                             "securityContext": {
                                 "runAsUser": 0,
