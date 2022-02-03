@@ -37,6 +37,7 @@ router.post('/', async function(request, response) {
     const simulation = {
         creationDate: new Date(),
         owner: response.locals.user.username,
+        projectFiles,
         projectUrlPublic: projectEndpointPublic,
         projectId,
         state: "starting",
