@@ -12,16 +12,6 @@ const hotReload_pipeline = async (newSimulationObject) => {
     // Find pod name
     const [ pod ] = await get(['pods', '-l', `app=sim-${simulationId}`]);
 
-    // Push new code
-    // SECURITY NOTE: Kubernetes deployment files will be copied to user code container!
-    const copyPromise = spawnWithLogs({
-        cmd: OC_CMD,
-        args: [...OC_FIXED_ARGS, 'rsync', `${appPath}/`, `pods/${pod.name}:/app`, '-c', 'user-code'],
-        spawnOptions: { timeout: 60_000 },
-        simulationId,
-        logGroup: 'hot-reload',
-    });
-
     // Kill the existing python instance if any
     const pythonKillPromise = spawnWithLogs({
         cmd: OC_CMD,
