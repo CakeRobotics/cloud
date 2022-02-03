@@ -22,7 +22,6 @@ const hotReload_pipeline = async (newSimulationObject) => {
         logGroup: 'hot-reload',
     });
 
-    await copyPromise;
     await pythonKillPromise;
 
     // Spawn new python process
