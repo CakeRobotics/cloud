@@ -93,6 +93,7 @@ services:
             MONGO_PASSWORD: ${SIM_MONGO_PASSWORD}
             AUTH_SERVICE: http://auth:8000
             PROJECTS_SERVICE: http://projects:8000
+            PROJECTS_SERVICE_PUBLIC: https://cloud.cakerobotics.com/api/projects
         restart: always
         volumes:
             - "/home/mostafa/.arvan:/root/.arvan:ro"
