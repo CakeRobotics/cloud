@@ -72,6 +72,7 @@ const getJob = async (simulationObject, authHeader) => {
                             ...simResources,
                             "env": [
                                 { "name": "WORLD", "value": simulationObject.world || "" },
+                                { "name": "ROBOT", "value": simulationObject.projectFiles.props.sim_robot || "" },
                             ],
                         },
                         {
