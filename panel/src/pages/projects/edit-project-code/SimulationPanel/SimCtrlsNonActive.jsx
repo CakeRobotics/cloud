@@ -44,7 +44,7 @@ const SimCtrlsNonActive = ({ projectId, dirty, refreshSims }) => {
                 onChange={setWorld}
                 options={[
                     { value: '', label: 'Default' },
-                    { value: '/usr/share/gazebo-11/worlds/cafe.world', label: 'Cafe' },
+                    { value: 'cafe', label: 'Cafe' },
                 ]}
             />
             <Button size="sm" onClick={startSimulation}>
