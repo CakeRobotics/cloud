@@ -2,15 +2,21 @@
 
 // This is a transformation from a template object to project object
 
-const defaulSampleCode = `
-import Cake
+const defaulSampleCode = `import cake
+from time import sleep
 
-class MyRobot():
-    def init():
-        pass
-    
-    def loop():
-        pass
+print("Starting the program...")
+robot = cake.Robot()
+
+print("Exploring the room...")
+robot.navigation.explore(timeout=40)
+
+print("Moving to the starting point...")
+robot.navigation.move_to(0, 0)
+sleep(15)
+
+print("Program finished.")
+robot.shutdown()
 `
 
 module.exports = function(template, owner) {
