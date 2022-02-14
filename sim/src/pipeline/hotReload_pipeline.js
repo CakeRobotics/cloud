@@ -32,7 +32,7 @@ const hotReload_pipeline = async (newSimulationObject) => {
             'nohup', '/bin/bash', '-c',
             `source /ros_entrypoint.sh
             cd /app
-            bash /crl/docker/dev/main.bash > /app/stdout 2>&1 &
+            python3 -u /crl/docker/dev/controller.py > /app/stdout 2>&1 &
             exit`
         ],
         spawnOptions: { timeout: 60_000 },

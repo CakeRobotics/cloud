@@ -99,7 +99,7 @@ const getJob = async (simulationObject, authHeader) => {
                                 `source /ros_entrypoint.sh
                                 cd /app
                                 mkfifo /app/stdout
-                                bash -c "bash /crl/docker/dev/main.bash > /app/stdout 2>&1 ; echo Robot application closed with exit code $? > /app/stdout" &
+                                bash -c "python3 -u /crl/docker/dev/controller.py > /app/stdout 2>&1 ; echo Robot application closed with exit code $? > /app/stdout" &
                                 bash -c "while true; do sleep 80; echo __KEEPALIVE__ > /app/stdout; done;" &
                                 while true; do cat /app/stdout; done;`
                             ], // Reason: if a container within the pod closes, kubernetes stops routing to that pod.
