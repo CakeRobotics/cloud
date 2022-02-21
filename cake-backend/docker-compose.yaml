@@ -2,6 +2,7 @@ version: '3.7'
 
 volumes:
     auth-db:
+    devices-db:
     projects-db:
     sim-db:
     templates-db:
