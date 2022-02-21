@@ -6,7 +6,8 @@ const axios = require('axios');
 // TODO: add tests
 module.exports = function(f) {
     return async function(request, response) {
-        const projectId = request.params.project;
+        const { project, owner } = request.params.project;
+        const projectId = `${owner}/${project}`;
 
         // Check auth header existance and format
         try {
