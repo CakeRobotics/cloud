@@ -5,14 +5,14 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 const { ObjectId } = require('mongodb');
 
 const { projectsCollection } = require('../db');
-const requireOwnership = require('../auth/requireOwnership');
+const requireOwnershipOrDeviceToken = require('../auth/requireOwnershipOrDeviceToken');
 
 const router = express.Router();
 router.use(express.json());
 
 router.get(
 '/:username/:project/:file',
-requireOwnership(
+requireOwnershipOrDeviceToken(
 async function(request, response) {
     // Validate id & create ObjectId object
     const id = request.params.project;
