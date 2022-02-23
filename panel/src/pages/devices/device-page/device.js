@@ -92,6 +92,7 @@ class Device extends Component {
             const token = localStorage.getItem('auth_token');
             const response = await axios.post(
                 `/api/devices/${this.props.match.params.owner}/${this.props.match.params.name}/restart`,
+                { },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             dispatch({
