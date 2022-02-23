@@ -42,4 +42,5 @@ test('Restart', async function() {
 
     // Close
     client.close();
+    await new Promise(r => setTimeout(r, 3000)); // Wait for 'disconnect' event handler
 });

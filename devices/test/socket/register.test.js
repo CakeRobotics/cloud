@@ -48,6 +48,7 @@ test('Register', async function() {
 
     // Get offline
     client.close();
+    await new Promise(r => setTimeout(r, 3000)); // Wait for 'disconnect' event handler
 
     // Assert device is offline
     var response = await
