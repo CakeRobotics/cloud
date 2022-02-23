@@ -39,4 +39,5 @@ test('Get All (OK)', async function() {
     expect(list[0].name).toEqual(name_2);
     expect(list[1].name).toEqual(name_1);
     expect(list[1].online).toEqual(false);
+    expect(list[1].owner).toEqual(testUsers.carol.username);
 });

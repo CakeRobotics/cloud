@@ -31,6 +31,7 @@ router.get('/', async function(request, response) {
         ip: device.ip,
         name: device.name,
         online: device.online,
+        owner: device.owner,
         project: device.project,
         sim: device.sim,
         token: device.token,
