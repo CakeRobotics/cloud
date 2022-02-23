@@ -15,34 +15,15 @@ servers:
 
 components:
   examples:
-    device-starting:
+    device:
       description: A device that is just starting
       value:
-        id: "61420269ab609ba401975c23"
-        creationDate: "2021-10-19T19:13:26.756Z"
-        owner: mostafa
-        projectId: "61420269ab609ba401975c00"
-        state: starting
-        step: "creating-node"
-    device-up:
-      description: A device that is running
-      value:
-        id: "61420269ab609ba401975c23"
-        creationDate: "2021-10-19T19:13:26.756Z"
-        owner: mostafa
-        projectId: "61420269ab609ba401975c00"
-        state: up
-        url: "https://sim.cakerobotics.com/61420269ab609ba401975c2c"
-        duration: 4
-    device-stopped:
-      description: A device that is finished
-      value:
-        id: "61420269ab609ba401975c23"
-        creationDate: "2021-10-19T19:13:26.756Z"
-        owner: mostafa
-        projectId: "61420269ab609ba401975c00"
-        state: stopped-user
-        duration: 344
+        ip: "150.65.220.79"
+        name: "my-bot-2"
+        online: true,
+        project: "alice/61420269ab609ba401975c00"
+        sim: false,
+        token: "147561116"
     device-list:
       description: List of devices
       value:
@@ -191,6 +172,333 @@ paths:
           description: Created
         '409':
           description: Name is not unique.
+
+  /{owner}/{deviceName}:
+    get:
+      summary: Get device info
+      description: Returns device info
+      operationId: getDevice
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/owner"
+        - "$ref": "#/components/parameters/deviceName"
+      responses:
+        '200':
+          description: Device info
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/device"
+              examples:
+                device:
+                  "$ref": "#/components/examples/device"
+        '404':
+          description: Device not found
+        '401':
+          description: Unauthorized
+
+
+  /{owner}/{deviceName}/assign_project:
+    post:
+      summary: Assign a project to a device. Also sends a restart command if the device is online.
+      operationId: assignProject
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/owner"
+        - "$ref": "#/components/parameters/deviceName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                project:
+                  type: string
+                  description: Full project ID (Must exist in projects service, but the check has not been implemented yet)
+              example:
+                project: "alice/6142039cab609ba401975c2d"
+      responses:
+        '200':
+          description: OK.
+        '404':
+          description: device ID lookup failed.
+
+  /{owner}/{deviceName}/src/{filename}:
+    get:
+      summary: Get the application that a device should execute
+      description: . This endpoint is supposed to be called by the device. This way, the device doesn't need to know the ID of the project assigned to it. The device only has to know its own full name and token. The endpoint will redirect to the correct project. The device should provide its token in authorization header in form of "Device {token}" (Note "Bearer" is replaced with "Device"). The projects service will use /check_access endpoint to validate device token before serving the project.
+      operationId: getProjectSource
+      security:
+        - normalUser: []
+        - adminUser: []
+        - device: []
+      parameters:
+        - "$ref": "#/components/parameters/owner"
+        - "$ref": "#/components/parameters/deviceName"
+        - "$ref": "#/components/parameters/filename"
+      responses:
+        '302':
+          description: Redirects to file path (URL will be in location header)
+        '401':
+          description: Unauthorized
+        '404':
+          description: Project not found
+
+  /{owner}/{deviceName}/restart:
+    post:
+      summary: Restart the device
+      description: A 'restart' command will be sent to the device via the socket. The device must be online.
+      operationId: restart
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/owner"
+        - "$ref": "#/components/parameters/deviceName"
+      responses:
+        '200':
+          description: Restarting the device.
+        '404':
+          description: Device not found.
+
+  /check_access:
+    post:
+      summary: Check if there exists a device with {token} that can access {projectId}
+      description: Used for quick, in-place code testing.
+      operationId: hotReload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - projectId
+              properties:
+                projectId:
+                  type: string
+                  description: Full project ID
+                token:
+                  type: string
+                  description: Device token
+              example:
+                projectId: "alice/6142039cab609ba401975c2d"
+                token: "165wr18u5i"
+      responses:
+        '202':
+          description: Accepted.
+        '404':
+          description: device ID lookup failed.
+        '409':
+          description: Hot-reload is not possible because project props have changed.openapi: "3.0.0"
+info:
+  description: |
+    This service provides an API for provisioning and controlling devices. The service also includes a TCP endpoint for devices to connect to.
+  version: "0.0.1"
+  title: "Cake Devices Service"
+  termsOfService: "https://cakerobotics.com/terms/"
+  contact:
+    email: "support@cakerobotics.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "https://cloud.cakerobotics.com/api/devices"
+
+components:
+  examples:
+    device:
+      description: A device that is just starting
+      value:
+        ip: "150.65.220.79"
+        name: "my-bot-2"
+        online: true,
+        project: "alice/61420269ab609ba401975c00"
+        sim: false,
+        token: "147561116"
+    device-list:
+      description: List of devices
+      value:
+      - ip: "150.65.220.79"
+        name: "my-bot-1"
+        online: true,
+        project: "alice/61420269ab609ba401975c00"
+        sim: false,
+        token: "14a8i97ebe"
+      - ip: "150.65.220.79"
+        name: "my-bot-2"
+        online: true,
+        project: "alice/61420269ab609ba401975c00"
+        sim: false,
+        token: "147561116"
+
+  parameters:
+    owner:
+      name: owner
+      description: Owner Username
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "alice"
+    deviceName:
+      name: deviceName
+      description: Device Name
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "my-bot-1"
+    filename:
+      name: filename
+      description: File Name
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "main.py"
+
+  schemas:
+    device:
+      type: object
+      properties:
+        ip:
+          type: string
+        name:
+          type: string
+        online:
+          type: boolean
+        project:
+          type: string
+        sim:
+          type: boolean
+        token:
+          type: string
+
+    device-list:
+      type: array
+      items:
+        "$ref": "#/components/schemas/device"
+
+  securitySchemes:
+    adminUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    normalUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    device:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Uses "Device ..." format instead of "Bearer ..."
+
+
+paths:
+  /:
+    get:
+      summary: Get all devices
+      description: Returns the list of all devices that current user has access to
+      operationId: getAll
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - name: owner
+          description: Owner (only applicable by admin)
+          in: query
+          required: false
+          schema:
+            type: string
+            example: carol
+        - name: project
+          description: ID of the project that device runs
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "61420269ab609ba401975c2c"
+      responses:
+        '200':
+          description: The list of devices
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/device-list"
+              examples:
+                device-list:
+                  "$ref": "#/components/examples/device-list"
+    post:
+      summary: Create a device
+      description: Provisions a new device and generates a token for it
+      operationId: createDevice
+      security:
+        - normalUser: []
+        - adminUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Project Name (Unique per user)
+                sim:
+                  type: boolean
+                  description: If the devices is in a simulation
+                project:
+                  type: string
+                  description: The ID of the project that the device should run
+              example:
+                name: "my-bot-1"
+                project: "alice/6142039cab609ba401975c2d"
+                sim: false
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Name is not unique.
+
+  /{owner}/{deviceName}:
+    get:
+      summary: Get device info
+      description: Returns device info
+      operationId: getDevice
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/owner"
+        - "$ref": "#/components/parameters/deviceName"
+      responses:
+        '200':
+          description: Device info
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/device"
+              examples:
+                device:
+                  "$ref": "#/components/examples/device"
+        '404':
+          description: Device not found
+        '401':
+          description: Unauthorized
+
 
   /{owner}/{deviceName}/assign_project:
     post:

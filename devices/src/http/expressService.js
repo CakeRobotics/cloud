@@ -28,6 +28,7 @@ const operations = [
     "assignProject",
     "createDevice",
     "getAll",
+    "getDevice",
     "restart",
 ];
 
