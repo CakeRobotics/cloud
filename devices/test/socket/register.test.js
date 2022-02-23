@@ -5,7 +5,13 @@ const getSocketAgent = require('../utils/getSocketAgent');
 const { waitForEvent } = require('../utils/socket');
 const randomString = require('../utils/randomString');
 
-test('Establish', async function() {
+test('Register (Unauthorized)', async function() {
+    const client = await getSocketAgent({ token: 'bad-token' });
+    const error = await waitForEvent(client, "error");
+    expect(error).toEqual('No device with such token.');
+})
+
+test('Register', async function() {
     // Create device
     const deviceName = `device-${randomString()}`;
     var response = await
@@ -25,14 +31,10 @@ test('Establish', async function() {
     const { token } = response.body.find(device => device.name === deviceName);
 
     // Create socket
-    const client = await getSocketAgent();
+    const client = await getSocketAgent({ token });
 
-    // Establish
-    client.emit('establish', {
-        id: `${testUsers.bob.username}/${deviceName}`,
-        token,
-    });
-    await waitForEvent(client, "establish_ok");
+    // Wait for accept
+    await waitForEvent(client, "accept");
 
     // Assert device is online
     var response = await
@@ -57,3 +59,4 @@ test('Establish', async function() {
     var { online } = response.body.find(device => device.name === deviceName);
     expect(online).toBeFalsy();
 })
+

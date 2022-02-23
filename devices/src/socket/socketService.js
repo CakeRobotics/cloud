@@ -1,18 +1,19 @@
 const socketService = require('socket.io')();
 
-const onEstablish = require('./onEstablish');
+const registerSocket = require('./registerSocket');
 const onDisconnect = require('./onDisconnect');
 
-socketService.on('connection', client => {
-    console.debug(`Socket ${client.id} created.`)
-
-    client.on('establish', async (data) => {
-        await onEstablish(client, data)
-
-        client.once('disconnect', async () => {
-            await onDisconnect(client);
-        });
-    });
+socketService.on('connection', async client => {
+    try {
+        const deviceId = await registerSocket(client);
+        client.once('disconnect', () => { onDisconnect(client) });
+        console.log(`Socket ${client.id} registered for device ${deviceId}.`);
+        client.emit('accept');
+    } catch (exception) {
+        client.emit('error', exception);
+        console.log(`Socket ${client.id} rejected due to error: "${exception}".`);
+        client.disconnect();
+    }
 });
 
 module.exports = {

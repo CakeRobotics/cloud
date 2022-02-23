@@ -25,14 +25,10 @@ test('Restart', async function() {
     const { token } = response.body.find(device => device.name === deviceName);
 
     // Create socket
-    const client = await getSocketAgent();
+    const client = await getSocketAgent({ token });
 
-    // Establish
-    client.emit('establish', {
-        id: `${testUsers.bob.username}/${deviceName}`,
-        token,
-    });
-    await waitForEvent(client, "establish_ok");
+    // Wait for accept
+    await waitForEvent(client, "accept");
 
     // Restart
     restartEvent = waitForEvent(client, "restart");
