@@ -22,6 +22,10 @@ router.put('/:owner/:name', async function(request, response) {
         response.status(StatusCodes.NOT_FOUND).send();
         return;
     }
+    if (device.online && device.name !== request.body.name) {
+        response.status(StatusCodes.BAD_REQUEST).send('Cannot rename online device.');
+        return;
+    }
     device.name = request.body.name || device.name;
     device.project = request.body.project || device.project;
     await devicesCollection().updateOne({ owner, name }, { $set: {
