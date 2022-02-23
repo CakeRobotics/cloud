@@ -15,6 +15,7 @@ import init from './functions/init';
 import Navbar from './components/Navbar';
 import Toasts from './components/Toasts';
 import ProjectsPage from './pages/projects';
+import DevicesPage from './pages/devices';
 import TemplatesPage from './pages/templates';
 
 
@@ -32,6 +33,9 @@ class App extends Component {
                     </Route>
                     <Route path="/templates">
                         <TemplatesPage/>
+                    </Route>
+                    <Route path="/devices">
+                        <DevicesPage/>
                     </Route>
                     <Route path="/">
                         <Redirect to="/projects"/>

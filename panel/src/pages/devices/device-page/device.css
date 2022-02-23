@@ -1,0 +1,16 @@
+.inline-code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #333;
+    color: #eee;
+    padding: 10px;
+    border-radius: 5px;
+    border: #333 solid 1px;
+}
+
+.inline-circle-green {
+    background-color: green;
+}
+
+.inline-circle-gray {
+    background-color: #aaa;
+}
