@@ -37,15 +37,12 @@ class PanelNavbar extends Component {
                         <Nav.Item>
                             <Nav.Link eventKey="devices" href={`${PUBLIC_URL}/devices`}>Devices</Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="simulations" href={`${PUBLIC_URL}/simulations`}>Simulations</Nav.Link>
-                        </Nav.Item>
                         <div className="navbar-vline"/>
                         <Nav.Item>
                             <Nav.Link eventKey="tutorials" href={`${PUBLIC_URL}/docs/tutorials`}>Tutorials</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="docs" href={`${PUBLIC_URL}/docs`}>Documentation</Nav.Link>
+                            <Nav.Link eventKey="docs" href="https://cakerobotics.github.io/crl/docs/latest/">Documentation</Nav.Link>
                         </Nav.Item>
                         <NavDropdown title={this.props.username || 'Loading...'} className="ms-auto">
                             <NavDropdown.Item href="/auth/settings">Settings</NavDropdown.Item>
