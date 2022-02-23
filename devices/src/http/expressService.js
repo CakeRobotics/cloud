@@ -27,9 +27,11 @@ app.use(requireLogin);
 const operations = [
     "assignProject",
     "createDevice",
+    "deleteDevice",
     "getAll",
     "getDevice",
     "restart",
+    "updateDevice",
 ];
 
 operations.forEach(function(operation) {
