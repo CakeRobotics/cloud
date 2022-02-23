@@ -145,7 +145,7 @@ class Device extends Component {
                 </Form>
                 <Form className="mt-3">
                     <Form.Label>Status: {this.state.online ?
-                        <><div className="inline-circle inline-circle-green"></div> Online </>:
+                        <><div className="inline-circle inline-circle-green"></div> Online ({this.state.ip}) </>:
                         <><div className="inline-circle inline-circle-gray"></div> Offline </>
                     }</Form.Label>
                 </Form>
