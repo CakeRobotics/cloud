@@ -17,7 +17,7 @@ router.get('/', async function(request, response) {
     if (request.query.owner) {
         if (request.query.owner !== user.username && user.type !== 'admin') {
             response.status(StatusCodes.UNAUTHORIZED);
-            response.send("Only admins can query other users' simulations.");
+            response.send("Only admins can query other users' devices.");
             return;
         }
         query.owner = request.query.owner;

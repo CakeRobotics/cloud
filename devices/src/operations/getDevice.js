@@ -14,7 +14,7 @@ router.get('/:owner/:name', async function(request, response) {
 
     if (user.type !== 'admin' && user.username !== owner) {
         response.status(StatusCodes.UNAUTHORIZED);
-        response.send("Only admins can query other users' simulations.");
+        response.send("Only admins can query other users' devices.");
         return;
     }
     const device = await devicesCollection().findOne({ owner, name });
