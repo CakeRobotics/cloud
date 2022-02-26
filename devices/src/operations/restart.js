@@ -22,10 +22,6 @@ router.post('/restart', async function(request, response) {
             response.status(StatusCodes.NOT_FOUND).send(`Device ${_id} was not found.`);
             return;
         }
-        if (!device.online) {
-            response.status(StatusCodes.BAD_REQUEST).send(`Device ${_id} is offline.`);
-            return;
-        }
     }
     // Restart
     for (const { owner, name } of request.body.devices) {
