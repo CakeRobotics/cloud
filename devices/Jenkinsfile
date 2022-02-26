@@ -29,14 +29,14 @@ pipeline {
       }
     }
 
-    stage('Test') {
-      steps {
-        script {
-          sh '${WORKSPACE}/test-config/run-tests.sh'
-        }
+    // stage('Test') {
+    //   steps {
+    //     script {
+    //       sh '${WORKSPACE}/test-config/run-tests.sh'
+    //     }
 
-      }
-    }
+    //   }
+    // }
 
     stage('Push') {
       steps {
