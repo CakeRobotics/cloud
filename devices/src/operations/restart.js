@@ -14,12 +14,12 @@ router.post('/restart', async function(request, response) {
     for (const { owner, name } of request.body.devices) {
         const _id = `${owner}/${name}`;
         if (response.locals.user.type !== 'admin' && response.locals.user.username !== owner) {
-            response.sendStatus(StatusCodes.UNAUTHORIZED).send(`Device ${_id} is unauthorized.`);
+            response.status(StatusCodes.UNAUTHORIZED).send(`Device ${_id} is unauthorized.`);
             return;
         }
         const device = await devicesCollection().findOne({ _id });
         if (!device) {
-            response.sendStatus(StatusCodes.NOT_FOUND).send(`Device ${_id} was not found.`);
+            response.status(StatusCodes.NOT_FOUND).send(`Device ${_id} was not found.`);
             return;
         }
         if (!device.online) {
