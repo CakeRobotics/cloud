@@ -36,9 +36,15 @@ test('Get Project Source (OK)', async function() {
 
     var response = await
         getHttpAgent()
-        .post(`/${testUsers.alice.username}/${deviceName}/assign_project`)
+        .post(`/assign_project`)
         .set('Authorization', `Bearer ${testUsers.alice.token}`)
-        .send({ project: projectFullId });
+        .send({
+            devices: [{
+                owner: testUsers.alice.username,
+                name: deviceName,
+            }],
+            project: projectFullId
+        });
     expect(response.statusCode).toEqual(StatusCodes.OK);
 
     var response = await

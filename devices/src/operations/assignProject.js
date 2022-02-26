@@ -11,34 +11,39 @@ const { devicesCollection } = require('../db');
 const router = express.Router();
 router.use(express.json());
 
-router.post('/:owner/:name/assign_project', async function(request, response) {
-    const { owner, name } = request.params;
-    const { project } = request.body;
-    if (response.locals.user.username !== owner) {
-        response.sendStatus(StatusCodes.UNAUTHORIZED);
-        return;
-    }
-    const _id = `${owner}/${name}`;
-    
-    // Assert device exists
-    const device = await devicesCollection().findOne({ _id });
-    if (!device) {
-        response.sendStatus(StatusCodes.NOT_FOUND);
-        return;
-    }
-
-    // Update device information
-    await devicesCollection().updateOne({ _id }, {
-        $set: {
-            project,
+router.post('/assign_project', async function(request, response) {
+    for (const { owner, name } of request.body.devices) {
+        const _id = `${owner}/${name}`;
+        // Assert correct access
+        if (response.locals.user.type !== 'admin' && response.locals.user.username !== owner) {
+            response.sendStatus(StatusCodes.UNAUTHORIZED).send(`Access denied to ${id}.`);
+            return;
         }
-    });
+        // Assert device exists
+        const device = await devicesCollection().findOne({ _id });
+        if (!device) {
+            response.sendStatus(StatusCodes.NOT_FOUND);
+            return;
+        }
+    }
 
-    // Restart device
-    if (device.online) {
-        const socket = getSocket(device.socketId);
-        console.info(`Restarting device ${_id}`);
-        socket.emit('restart');
+    // Set project
+    const { project } = request.body;
+    for (const { owner, name } of request.body.devices) {
+        const _id = `${owner}/${name}`;
+        // Update device information
+        await devicesCollection().updateOne({ _id }, {
+            $set: {
+                project,
+            }
+        });
+        // Restart device
+        const { online } = await devicesCollection().findOne({ _id });
+        if (online) {
+            const socket = getSocket(device.socketId);
+            console.info(`Restarting device ${_id}`);
+            socket.emit('restart');
+        }
     }
 
     // Finish

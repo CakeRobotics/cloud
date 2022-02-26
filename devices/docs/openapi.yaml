@@ -203,7 +203,7 @@ paths:
           description: Unauthorized
 
 
-  /{owner}/{deviceName}/assign_project:
+  /assign_project:
     post:
       summary: Assign a project to a device. Also sends a restart command if the device is online.
       operationId: assignProject
@@ -222,10 +222,24 @@ paths:
               required:
                 - name
               properties:
+                devices:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      owner:
+                        type: string
+                      name:
+                        type: string
                 project:
                   type: string
                   description: Full project ID (Must exist in projects service, but the check has not been implemented yet)
               example:
+                devices:
+                  - owner: alice
+                    name: my-robot-1
+                  - owner: alice
+                    name: my-robot-2
                 project: "alice/6142039cab609ba401975c2d"
       responses:
         '200':
