@@ -34,9 +34,12 @@ test('Restart', async function() {
     restartEvent = waitForEvent(client, "restart");
     var response = await
         getHttpAgent()
-        .post(`/${testUsers.bob.username}/${deviceName}/restart`)
+        .post(`/restart`)
         .set('Authorization', `Bearer ${testUsers.bob.token}`)
-        .send();
+        .send({ devices: [{
+            owner: testUsers.bob.username,
+            name: deviceName,
+        }] });
     expect(response.statusCode).toEqual(StatusCodes.OK);
     await restartEvent;
 

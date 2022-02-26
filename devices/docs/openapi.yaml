@@ -268,7 +268,7 @@ paths:
         '404':
           description: Project not found
 
-  /{owner}/{deviceName}/restart:
+  /restart:
     post:
       summary: Restart the device
       description: A 'restart' command will be sent to the device via the socket. The device must be online.
@@ -276,9 +276,30 @@ paths:
       security:
         - normalUser: []
         - adminUser: []
-      parameters:
-        - "$ref": "#/components/parameters/owner"
-        - "$ref": "#/components/parameters/deviceName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                devices:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      owner:
+                        type: string
+                      name:
+                        type: string
+              example:
+                devices:
+                  - owner: alice
+                    name: my-robot-1
+                  - owner: alice
+                    name: my-robot-2
       responses:
         '200':
           description: Restarting the device.

@@ -9,26 +9,32 @@ const { devicesCollection } = require('../db');
 const router = express.Router();
 router.use(express.json());
 
-router.post('/:owner/:name/restart', async function(request, response) {
-    const { owner, name } = request.params;
-    if (response.locals.user.username !== owner) {
-        response.sendStatus(StatusCodes.UNAUTHORIZED);
-        return;
+router.post('/restart', async function(request, response) {
+    // Assertions
+    for (const { owner, name } of request.body.devices) {
+        const _id = `${owner}/${name}`;
+        if (response.locals.user.type !== 'admin' && response.locals.user.username !== owner) {
+            response.sendStatus(StatusCodes.UNAUTHORIZED).send(`Device ${_id} is unauthorized.`);
+            return;
+        }
+        const device = await devicesCollection().findOne({ _id });
+        if (!device) {
+            response.sendStatus(StatusCodes.NOT_FOUND).send(`Device ${_id} was not found.`);
+            return;
+        }
+        if (!device.online) {
+            response.status(StatusCodes.BAD_REQUEST).send(`Device ${_id} is offline.`);
+            return;
+        }
     }
-    const _id = `${owner}/${name}`;
-
-    const device = await devicesCollection().findOne({ _id });
-    if (!device) {
-        response.sendStatus(StatusCodes.NOT_FOUND);
-        return;
+    // Restart
+    for (const { owner, name } of request.body.devices) {
+        const _id = `${owner}/${name}`;
+        const device = await devicesCollection().findOne({ _id });
+        const socket = getSocket(device.socketId);
+        console.info(`Restarting device ${_id}`)
+        socket.emit('restart');
     }
-    if (!device.online) {
-        response.status(StatusCodes.BAD_REQUEST).send("Device is offline.");
-        return;
-    }
-    const socket = getSocket(device.socketId);
-    console.info(`Restarting device ${_id}`)
-    socket.emit('restart');
     response.sendStatus(200);
 });
 
