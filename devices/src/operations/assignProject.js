@@ -16,13 +16,13 @@ router.post('/assign_project', async function(request, response) {
         const _id = `${owner}/${name}`;
         // Assert correct access
         if (response.locals.user.type !== 'admin' && response.locals.user.username !== owner) {
-            response.sendStatus(StatusCodes.UNAUTHORIZED).send(`Access denied to ${id}.`);
+            response.sendStatus(StatusCodes.UNAUTHORIZED).send(`Access denied to ${_id}.`);
             return;
         }
         // Assert device exists
         const device = await devicesCollection().findOne({ _id });
         if (!device) {
-            response.sendStatus(StatusCodes.NOT_FOUND);
+            response.sendStatus(StatusCodes.NOT_FOUND).send(`Device ${_id} not found.`);
             return;
         }
     }
