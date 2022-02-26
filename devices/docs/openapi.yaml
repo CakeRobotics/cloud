@@ -234,6 +234,9 @@ paths:
                 project:
                   type: string
                   description: Full project ID (Must exist in projects service, but the check has not been implemented yet)
+                unsetOthers:
+                  type: boolean
+                  description: Defaults to false. If true, the devices provided in the 'devices' field will be set to use the project in 'project' field, then all other devices that used to link to the project will link to the empty project.
               example:
                 devices:
                   - owner: alice

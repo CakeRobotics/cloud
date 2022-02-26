@@ -30,6 +30,15 @@ router.post('/assign_project', async function(request, response) {
     // Set project
     const { project } = request.body;
     for (const { owner, name } of request.body.devices) {
+        // Unset other devices were linked to this project
+        const { unsetOthers } = request.body;
+        if (unsetOthers) {
+            await devicesCollection().updateOne({ project }, {
+                $set: {
+                    project: '',
+                }
+            });
+        }
         const _id = `${owner}/${name}`;
         // Update device information
         await devicesCollection().updateOne({ _id }, {
