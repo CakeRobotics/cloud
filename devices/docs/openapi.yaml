@@ -250,7 +250,7 @@ paths:
         '404':
           description: device ID lookup failed.
 
-  /{owner}/{deviceName}/src/{filename}:
+  /src/{filename}:
     get:
       summary: Get the application that a device should execute
       description: . This endpoint is supposed to be called by the device. This way, the device doesn't need to know the ID of the project assigned to it. The device only has to know its own full name and token. The endpoint will redirect to the correct project. The device should provide its token in authorization header in form of "Device {token}" (Note "Bearer" is replaced with "Device"). The projects service will use /check_access endpoint to validate device token before serving the project.
@@ -260,8 +260,6 @@ paths:
         - adminUser: []
         - device: []
       parameters:
-        - "$ref": "#/components/parameters/owner"
-        - "$ref": "#/components/parameters/deviceName"
         - "$ref": "#/components/parameters/filename"
       responses:
         '302':

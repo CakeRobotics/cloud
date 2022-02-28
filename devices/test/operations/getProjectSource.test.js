@@ -58,7 +58,7 @@ test('Get Project Source (OK)', async function() {
 
     var response = await
         getHttpAgent()
-        .get(`/${testUsers.alice.username}/${deviceName}/src/main.py`)
+        .get(`/src/main.py`)
         .set('Authorization', `Device ${token}`)
         .send();
     expect(response.status).toEqual(StatusCodes.MOVED_TEMPORARILY);

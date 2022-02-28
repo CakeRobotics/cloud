@@ -11,8 +11,8 @@ const { devicesCollection } = require('../db');
 const router = express.Router();
 router.use(express.json());
 
-router.get('/:owner/:name/src/:filename', async function(request, response) {
-    const { owner, name, filename } = request.params;
+router.get('/src/:filename', async function(request, response) {
+    const { filename } = request.params;
     try {
         const authorizationHeader = request.headers.authorization;
         var token = (/Device (.+)/).exec(authorizationHeader)[1];
@@ -22,16 +22,9 @@ router.get('/:owner/:name/src/:filename', async function(request, response) {
     }
 
     // Find device
-    const _id = `${owner}/${name}`;
-    const device = await devicesCollection().findOne({ _id });
+    const device = await devicesCollection().findOne({ token });
     if (!device) {
         response.sendStatus(StatusCodes.NOT_FOUND);
-        return;
-    }
-
-    // Assert access
-    if (token !== device.token) {
-        response.status(StatusCodes.UNAUTHORIZED).send('Bad token.');
         return;
     }
 
