@@ -46,14 +46,8 @@ router.post('/assign_project', async function(request, response) {
                 project,
             }
         });
-        // Get socket id
-        const { socketId } = await devicesCollection().findOne({ _id });
-        if (!device) {
-            response.status(StatusCodes.NOT_FOUND).send(`Device ${_id} not found.`);
-            return;
-        }
         // Restart device
-        const { online } = await devicesCollection().findOne({ _id });
+        const { online, socketId } = await devicesCollection().findOne({ _id });
         if (online) {
             const socket = getSocket(socketId);
             console.info(`Restarting device ${_id}`);
