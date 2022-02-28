@@ -19,7 +19,7 @@ module.exports = function(f) {
         }
 
         // Validate token and get extra info about the user
-        const accessResponse = await axios.post(`${process.env.DEVICE_SERVICE}/check_access`, { token, projectId });
+        const accessResponse = await axios.post(`${process.env.DEVICES_SERVICE}/check_access`, { token, projectId });
         if (accessResponse.status !== StatusCodes.UNAUTHORIZED) {
             response.status(accessResponse.status).send(accessResponse.body);
             return;
