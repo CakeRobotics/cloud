@@ -16,11 +16,12 @@ class Device extends Component {
         name: '',
         owner: '',
         project: '',
+        logs: [],
     }
 
-    async componentDidMount() {
+    loadDeviceInfo = async () => {
         const {owner, name} = this.props.match.params;
-        const device = await loadDevice(owner, name);
+        var device = await loadDevice(owner, name);
         this.setState(device);
         const projects = await loadProjects();
         this.setState({ projects })
@@ -33,6 +34,22 @@ class Device extends Component {
                 this.setState({ project: null })
             }
         }
+    }
+
+    trackDeviceState = async () => {
+        const {owner, name} = this.props.match.params;
+        var device = await loadDevice(owner, name);
+        this.setState({
+            logs: device.logs,
+            online: device.online,
+            ip: device.ip,
+        })
+        setTimeout(this.trackDeviceState, 3000);
+    }
+
+    async componentDidMount() {
+        await this.loadDeviceInfo();
+        this.trackDeviceState();
     }
 
     async post() {
@@ -160,13 +177,19 @@ class Device extends Component {
                 </Form>
                 <Form className="mt-3" hidden={this.state.online}>
                     <Form.Label>Startup command:</Form.Label>
-                    <p><Form.Label className="inline-code">
+                    <div><Form.Label className="inline-code">
                         <div className="dollar-sign">$ </div>sudo docker run --privileged -e TOKEN={this.state.token} cakerobotics/crl-dev
-                    </Form.Label></p>
+                    </Form.Label></div>
                 </Form>
                 <Form className="mt-3" hidden={!this.state.online}>
                     <Form.Label>Control:</Form.Label>
                     <Button onClick={this.restart.bind(this)} className="ms-1" variant="outline-primary" size="sm">Restart</Button>
+                </Form>
+                <Form className="mt-3" hidden={this.state.online}>
+                    <Form.Label>Logs:</Form.Label>
+                    <div><Form.Label className="inline-code">
+                        {this.state.logs && this.state.logs.map(log => <div>{log.message}</div>)}
+                    </Form.Label></div>
                 </Form>
             </>
         );
