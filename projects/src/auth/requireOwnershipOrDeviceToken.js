@@ -8,7 +8,7 @@ const requireDeviceToken = require('./requireDeviceToken');
 // *or* user in auth token is admin.
 module.exports = function(f) {
     return async function(request, response) {
-        const authorizationHeader = request.headers.authorization;
+        const authorizationHeader = request.headers.authorization || 'none';
         if (authorizationHeader.match(/Bearer.+/)) {
             return (requireOwnership(f))(request, response);
         } else if (authorizationHeader.match(/Device.+/)) {
