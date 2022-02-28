@@ -28,8 +28,10 @@ router.post('/restart', async function(request, response) {
         const _id = `${owner}/${name}`;
         const device = await devicesCollection().findOne({ _id });
         const socket = getSocket(device.socketId);
-        console.info(`Restarting device ${_id}`)
-        socket.emit('restart');
+        if (socket) {
+            console.info(`Restarting device ${_id}`)
+            socket.emit('restart');
+        }
     }
     response.sendStatus(200);
 });
