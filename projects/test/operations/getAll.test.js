@@ -38,9 +38,9 @@ describe('Get All', function() {
             .set('Authorization', `Bearer ${testUsers.alice.token}`)
             .send();
         expect(response.statusCode).toEqual(StatusCodes.OK);
-        // const receivedList = response.body;
-        // const matchedProject = receivedList.find(value => value._id === id);
-        // expect(matchedProject).toBeTruthy(); // fails if match is undefined (i.e. not found)
-        // expect(matchedProject).toMatchObject(project);
+        const receivedList = response.body;
+        const matchedProject = receivedList.find(value => value._id === id);
+        expect(matchedProject).toBeTruthy(); // fails if match is undefined (i.e. not found)
+        expect(matchedProject.owner).toEqual(testUsers.alice.username);
     })
 })

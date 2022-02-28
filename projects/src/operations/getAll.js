@@ -26,6 +26,7 @@ async function(request, response) {
         _id: project._id,
         name: JSON.parse(project.files['props.json']).name, // TODO: Cache project name
         lastChange: project.lastChange,
+        owner: project.owner,
     }));
 
     // Return
