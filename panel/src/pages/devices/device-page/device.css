@@ -22,3 +22,14 @@
 .inline-circle-gray {
     background-color: #aaa;
 }
+
+.dollar-sign {
+    color: yellow;
+    display: inline-block;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    margin-right: 0.5em;
+}
