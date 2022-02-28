@@ -7,6 +7,14 @@
     border: #333 solid 1px;
 }
 
+.inline-circle {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    border-radius: 50%;
+    margin-left: 0.25em;
+}
+
 .inline-circle-green {
     background-color: green;
 }

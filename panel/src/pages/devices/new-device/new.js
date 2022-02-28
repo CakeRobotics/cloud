@@ -25,7 +25,7 @@ class NewDevice extends Component {
             const token = localStorage.getItem('auth_token');
             const response = await axios.post(
                 `/api/devices/`,
-                { name: this.state.name, project: this.state.project },
+                { name: this.state.name, project: this.state.project.value },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             dispatch({
