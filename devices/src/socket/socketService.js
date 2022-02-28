@@ -1,4 +1,4 @@
-const socketService = require('socket.io')();
+const socketService = require('socket.io')({ path: '/' });
 
 const registerSocket = require('./registerSocket');
 const onDisconnect = require('./onDisconnect');
