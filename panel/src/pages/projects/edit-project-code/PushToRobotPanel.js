@@ -8,6 +8,7 @@ import axios from 'axios';
 import { dispatch } from '../../../redux/store';
 import loadDevices from './functions/loadDevices';
 import './PushToRobotPanel.css';
+import { getState } from '../../../redux/store';
 
 
 class Panel extends Component {
@@ -15,7 +16,8 @@ class Panel extends Component {
     async componentDidMount() {
         const devices = await loadDevices();
         const { projectId } = this.props.match.params;
-        var selectedDevices = devices.filter(device => projectId === device.project);
+        const { username } = await getState();
+        var selectedDevices = devices.filter(device => device.project === `${username}/${projectId}`);
         selectedDevices = selectedDevices.map(device => ({
             value: {owner: device.owner, name: device.name},
             label: <>{device.online ? <div className="inlist-circle inlist-circle-green"></div> : <div className="inlist-circle inlist-circle-gray"></div>} {device.name}</>,
@@ -24,11 +26,16 @@ class Panel extends Component {
     }
 
     async updateAssignedDevices(selectedDevices) {
+        const { username } = await getState();
         try {
             const token = localStorage.getItem('auth_token');
             const response = await axios.post(
                 `/api/devices/assign_project`,
-                { devices: selectedDevices.map(selection => selection.value), unsetOthers: true, project: this.props.match.params.projectId },
+                {
+                    devices: selectedDevices.map(selection => selection.value),
+                    unsetOthers: true,
+                    project: `${username}/${this.props.match.params.projectId}`
+                },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             dispatch({

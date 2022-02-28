@@ -25,10 +25,13 @@ class Device extends Component {
         const projects = await loadProjects();
         this.setState({ projects })
         // Overwrite project string with project option object
-        console.log(device.project)
         if (device.project && device.project !== '') {
-            const projectMatch = projects.find(project => project._id === device.project);
-            this.setState({ project: {value: projectMatch._id, label: projectMatch.name} }) // Overwrite
+            const projectMatch = projects.find(project => device.project === `${project.owner}/${project._id}`);
+            if (projectMatch) {
+                this.setState({ project: {value: projectMatch, label: projectMatch.name} }) // Overwrite
+            } else {
+                this.setState({ project: null })
+            }
         }
     }
 
@@ -37,7 +40,7 @@ class Device extends Component {
             const token = localStorage.getItem('auth_token');
             const response = await axios.put(
                 `/api/devices/${this.props.match.params.owner}/${this.props.match.params.name}`,
-                { name: this.state.name, project: this.state.project.value },
+                { name: this.state.name, project: `${this.state.project.value.owner}/${this.state.project.value._id}` },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             dispatch({
@@ -142,7 +145,7 @@ class Device extends Component {
                             value={ this.state.project }
                             onChange={ project => { this.setState({ project }); console.log(project) } }
                             options={ this.state.projects.map(project => ({
-                                value: project._id,
+                                value: project,
                                 label: project.name,
                             })) }
                         /> :
