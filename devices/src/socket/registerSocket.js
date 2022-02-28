@@ -28,7 +28,7 @@ const registerSocket = async (client) => {
     }
     storeSocket(client.id, client);
 
-    return device.id;
+    return `${device.owner}/${device.name}`;
 }
 
 module.exports = registerSocket;

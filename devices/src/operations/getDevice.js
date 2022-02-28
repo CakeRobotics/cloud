@@ -25,6 +25,7 @@ router.get('/:owner/:name', async function(request, response) {
 
     const result = {
         ip: device.ip,
+        logs: device.logs,
         name: device.name,
         online: device.online,
         owner: device.owner,
