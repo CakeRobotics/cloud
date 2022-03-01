@@ -185,7 +185,7 @@ class Device extends Component {
                     <Form.Label>Control:</Form.Label>
                     <Button onClick={this.restart.bind(this)} className="ms-1" variant="outline-primary" size="sm">Restart</Button>
                 </Form>
-                <Form className="mt-3" hidden={this.state.online}>
+                <Form className="mt-3">
                     <Form.Label>Logs:</Form.Label>
                     <div><Form.Label className="inline-code">
                         {this.state.logs && this.state.logs.map(log => <div>{log.message}</div>)}
