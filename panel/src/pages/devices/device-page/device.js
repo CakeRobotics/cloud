@@ -143,6 +143,36 @@ class Device extends Component {
         }
     }
 
+    async stop() {
+        try {
+            const token = localStorage.getItem('auth_token');
+            const response = await axios.post(
+                `/api/devices/stop`,
+                { devices: [{ owner: this.props.match.params.owner, name: this.props.match.params.name }] },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            dispatch({
+                type: 'ADD_TOAST',
+                payload: {
+                    title: "Success.",
+                    body: response.body,
+                    color: "SUCCESS",
+                    time: new Date(),
+                }
+            });
+        } catch (error) {
+            dispatch({
+                type: 'ADD_TOAST',
+                payload: {
+                    title: "Error.",
+                    body: error.response.data,
+                    color: "ERROR",
+                    time: new Date(),
+                }
+            })
+        }
+    }
+
     render() {
         return (
             <>
@@ -184,6 +214,7 @@ class Device extends Component {
                 <Form className="mt-3" hidden={!this.state.online}>
                     <Form.Label>Control:</Form.Label>
                     <Button onClick={this.restart.bind(this)} className="ms-1" variant="outline-primary" size="sm">Restart</Button>
+                    <Button onClick={this.stop.bind(this)} className="ms-1" variant="outline-warning" size="sm">Stop</Button>
                 </Form>
                 <Form className="mt-3">
                     <Form.Label>Logs:</Form.Label>
