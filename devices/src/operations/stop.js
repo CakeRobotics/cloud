@@ -32,7 +32,6 @@ router.post('/stop', async function(request, response) {
             console.info(`Stopping device ${_id}`)
             socket.emit('stop');
         }
-        await devicesCollection().updateOne({ _id }, { logs: [] }); // Clear logs
     }
     response.sendStatus(200);
 });
