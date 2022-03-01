@@ -53,6 +53,8 @@ router.post('/assign_project', async function(request, response) {
             console.info(`Restarting device ${_id}`);
             socket.emit('restart');
         }
+        // Clear logs
+        await devicesCollection().updateOne({ _id }, { logs: [] });
     }
 
     // Finish
