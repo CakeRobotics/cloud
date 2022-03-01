@@ -32,7 +32,7 @@ router.post('/restart', async function(request, response) {
             console.info(`Restarting device ${_id}`)
             socket.emit('restart');
         }
-        await devicesCollection().updateOne({ _id }, { logs: [] }); // Clear logs
+        await devicesCollection().updateOne({ _id }, { $set: { logs: [] } }); // Clear logs
     }
     response.sendStatus(200);
 });

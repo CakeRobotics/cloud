@@ -54,7 +54,7 @@ router.post('/assign_project', async function(request, response) {
             socket.emit('restart');
         }
         // Clear logs
-        await devicesCollection().updateOne({ _id }, { logs: [] });
+        await devicesCollection().updateOne({ _id }, { $set: { logs: [] } });
     }
 
     // Finish
