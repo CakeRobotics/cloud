@@ -31,6 +31,7 @@ const operations = [
     "getAll",
     "getDevice",
     "restart",
+    "stop",
     "updateDevice",
 ];
 
