@@ -16,10 +16,18 @@ class PropsEditor extends Component {
             <>
                 <Form>
                     <Form.Label>Name:</Form.Label>
-                    <Form.Control value={this.props.props.name} onChange={e => {
+                    <Form.Control className="mb-3" value={this.props.props.name} onChange={e => {
                         const name = e.target.value;
                         const props = produce(this.props.props, props => {
                             props.name = name;
+                        });
+                        this.props.onPropsChange(props);
+                    }}/>
+                    <Form.Label>ROS 1 Port <i>(optional)</i>:</Form.Label>
+                    <Form.Control type="number" value={this.props.props.ros1_port || ""} onChange={e => {
+                        const ros1_port = e.target.value || undefined;
+                        const props = produce(this.props.props, props => {
+                            props.ros1_port = ros1_port;
                         });
                         this.props.onPropsChange(props);
                     }}/>
