@@ -24,6 +24,7 @@ module.exports = function(template, owner) {
 
     delete template._id;
     delete template.sampleCode;
+    delete template.thumbnail;
 
     return {
         owner,
