@@ -208,7 +208,7 @@ class Device extends Component {
                 <Form className="mt-3" hidden={this.state.online}>
                     <Form.Label>Startup command:</Form.Label>
                     <div><Form.Label className="inline-code">
-                        <div className="dollar-sign">$ </div>sudo docker run --privileged --network=host -e TOKEN={this.state.token} cakerobotics/crl-dev
+                        <div className="dollar-sign">$ </div>sudo docker run --privileged --network=host --restart=unless-stopped -e TOKEN={this.state.token} cakerobotics/crl-dev
                     </Form.Label></div>
                 </Form>
                 <Form className="mt-3" hidden={!this.state.online}>
