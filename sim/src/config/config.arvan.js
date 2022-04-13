@@ -12,7 +12,7 @@ const NODE_HOSTNAMES_POOL = [
 const DEFINE_RESOURCES = true;
 
 // OC Project (Namespace)
-const OC_PROJECT = "test-1";
+const OC_PROJECT = "cakerobotics";
 
 // Fixed arguments to oc calls (all calls are like $OC_CMD $OC_FIXED_ARGS ...)
 const OC_FIXED_ARGS = [
