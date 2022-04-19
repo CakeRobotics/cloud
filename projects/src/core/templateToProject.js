@@ -3,7 +3,6 @@
 // This is a transformation from a template object to project object
 
 const defaulSampleCode = `import cake
-from time import sleep
 
 print("Starting the program...")
 robot = cake.Robot()
@@ -13,7 +12,6 @@ robot.navigation.explore(timeout=40)
 
 print("Moving to the starting point...")
 robot.navigation.move_to(0, 0)
-sleep(15)
 
 print("Program finished.")
 robot.shutdown()
