@@ -23,10 +23,10 @@ const OC_FIXED_ARGS = [
 ];
 
 // Where to pull sim image from
-const SIM_IMAGE = `cakerobotics/sim:r23.922ef83-lite`;
+const SIM_IMAGE = `oreg.cakerobotics.com/sim:r23.922ef83-lite`;
 
 // Where to pull crl image from
-const CRL_DEV_IMAGE = `cakerobotics/crl-dev:latest`;
+const CRL_DEV_IMAGE = `oreg.cakerobotics.com/crl-dev:latest`;
 
 // cake-bundler executable (probably venv'd) FIXME: needs dockerfile
 const PYTHON_EXEC = `python3` // $ source /home/mostafa/dev/cake/core/sim/venv/bin/activate
