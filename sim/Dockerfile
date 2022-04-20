@@ -23,12 +23,6 @@ COPY package.json yarn.lock ./
 RUN yarn
 RUN yarn
 
-# Install crl
-WORKDIR /root
-RUN apt-get install -y git
-ARG CRL_CACHE_BUST=1
-RUN echo "$CRL_CACHE_BUST" && pip3 install git+https://github.com/CakeRobotics/crl
-
 # Copy service code
 WORKDIR /app
 COPY . ./
