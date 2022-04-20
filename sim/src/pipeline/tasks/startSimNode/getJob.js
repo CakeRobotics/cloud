@@ -105,6 +105,11 @@ const getJob = async (simulationObject, authHeader) => {
                             ], // Reason: if a container within the pod closes, kubernetes stops routing to that pod.
                             ...userCodeResources,
                         }
+                    ],
+                    "imagePullSecrets": [
+                        {
+                            "name": "regcred"
+                        }
                     ]
                 }
             }
