@@ -16,6 +16,9 @@ const parseOpenshiftTable = (text) => {
 
     var list = [];
     for (var i = 0; i < dataRows.length; i++) {
+        if (!dataRows[i].match(/sim/)) {
+            continue;
+        }
         const cells = _parseTableRow(dataRows[i]);
         var item = {};
         for (var j=0; j<headers.length; j++) {
