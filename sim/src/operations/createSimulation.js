@@ -69,7 +69,7 @@ router.post('/', async function(request, response) {
             {
                 $set: {
                     state: "up",
-                    url: `http://${hostname}`,
+                    url: `https://${hostname}`,
                     startTime: new Date(),
                 },
             }
