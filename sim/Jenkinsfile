@@ -24,7 +24,7 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          dockerImage = docker.build("images.cakerobotics.com/mostafa/sim:latest", ".", "--build-arg CRL_CACHE_BUST=${BUILD_ID}")
+          dockerImage = docker.build "images.cakerobotics.com/mostafa/sim:latest", "."
         }
       }
     }
