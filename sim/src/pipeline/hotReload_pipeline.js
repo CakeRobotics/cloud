@@ -30,8 +30,7 @@ const hotReload_pipeline = async (newSimulationObject) => {
         cmd: OC_CMD,
         args: [...OC_FIXED_ARGS, 'exec', `pods/${pod.name}`, '-c', 'user-code', '--',
             'nohup', '/bin/bash', '-c',
-            `source /ros_entrypoint.sh
-            cd /app
+            `cd /app
             python3 -u /crl/docker/dev/controller.py > /app/stdout 2>&1 &
             exit`
         ],
