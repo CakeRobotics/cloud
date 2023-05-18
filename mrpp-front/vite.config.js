@@ -13,4 +13,6 @@ export default defineConfig({
     }
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/multirobot/' : '/',
+  publicDir: process.env.NODE_ENV === 'production' ? '/multirobot/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/multirobot/' : '/',
 })
