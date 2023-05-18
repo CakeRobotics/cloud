@@ -19,3 +19,8 @@ services:
         image: images.cakerobotics.com/mostafa/auth-ui:latest
         container_name: cake-auth-ui
         restart: always
+
+    panel:
+        image: images.cakerobotics.com/mostafa/panel:latest
+        container_name: cake-panel
+        restart: always
