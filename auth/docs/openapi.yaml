@@ -1,0 +1,222 @@
+openapi: "3.0.0"
+info:
+  description: "This microservice provides an API for user authentication and management. A bearer token is issued upon calling the login endpoint. The token can later be used for authorization purposes."
+  version: "1.0.0"
+  title: "Cake Auth Service"
+  termsOfService: "https://cakerobotics.com/terms/"
+  contact:
+    email: "support@cakerobotics.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "https://cloud.cakerobotics.com/api/auth"
+components:
+  securitySchemes:
+    adminUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /login:
+    post:
+      summary: Get login token
+      description: Login with username & password. A bearer token will be returned which can be used for authentication and authorization in the future requests.
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username_or_email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username_or_email
+                - password
+              example:
+                username_or_email: user@example.com
+                password: "123456"
+      responses:
+        '200':
+          description: Generated user token
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNha2UiLCJlbWFpbCI6ImNha2VAZXhhbXBsZS5jb20iLCJpYXQiOjE2Mjc5MjQzMDR9.KmwG7Lzqvgj0O1Av6fFstZC-YXFx3djm9YvQYU3dY0A"
+        '401':
+          description: Wrong username or password
+
+  /validate:
+    post:
+      summary: Validate a user login token
+      description: Gets a user token, verifies it, and returns extra information about the user that owns the token.
+      operationId: validate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required:
+                - token
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNha2UiLCJlbWFpbCI6ImNha2VAZXhhbXBsZS5jb20iLCJpYXQiOjE2Mjc5MjQzMDR9.KmwG7Lzqvgj0O1Av6fFstZC-YXFx3djm9YvQYU3dY0A"
+      responses:
+        '200':
+          description: Good token. Returning user info.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  type:
+                    type: string
+                    enum:
+                      - normal
+                      - admin
+                example:
+                  username: example-user
+                  email: user@example.com
+                  type: normal
+        '406':
+          description: Bad token or username encoded in the token was not found in database. (i.e. username has been changed or removed after the token was issued.)
+  
+  /register:
+    post:
+      summary: Register new user
+      description: Register a new user. Currently requires registration token (i.e. invitation code).
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                type:
+                  type: string
+                  enum:
+                    - normal
+                    - admin
+                  default: normal
+                registrationToken:
+                  type: string
+                  description: "Use /createRegistrationToken endpoint as admin to generate this."
+              required:
+                - username
+                - email
+                - password
+                - registrationToken
+              example:
+                username: example-user
+                email: user@example.com
+                password: "123456"
+                type: normal
+                registrationToken: "7GtXI76tH9XXFSMt"
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Invalid input format
+        '406':
+          description: Invalid user - registration token pair
+        '409':
+          description: Username or email already exists
+        '501':
+          description: Not implemented. Raises iff type == 'admin'.
+
+  /createRegistrationToken:
+    post:
+      summary: Create registration token (i.e. invitation code)
+      description: Gets an email and generates a token which will allow registering a user with that email. Requires admin authorization token.
+      operationId: createRegistrationToken
+      security:
+        - adminUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+              example:
+                email: user@example.com
+      responses:
+        '200':
+          description: Returning the token (either newly generated or existing one).
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "7GtXI76tH9XXFSMt"
+        '401':
+          description: Bad authorization token
+
+  /health:
+    get:
+      summary: Used to check service health
+      description: If the node is healthy, it returns a 200 response.
+      operationId: health
+      responses:
+        '200':
+          description: Service can respond.
+
+  /users/{username}:
+    get:
+      summary: Get information about a user
+      description: Returns username, email and type of a user, given its username.
+      operationId: getUser
+      security:
+        - adminUser: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+            example: carol
+      responses:
+        '200':
+          description: Returns user info.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  type:
+                    type: string
+                    enum:
+                      - normal
+                      - admin
+                example:
+                  username: carol
+                  email: carol@example.com
+                  type: normal
+        '401':
+          description: Bad authorization token
