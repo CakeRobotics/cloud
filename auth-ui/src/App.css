@@ -1,0 +1,84 @@
+body, html {
+    font-family: "Actor", sans-serif;
+    color: #111;
+    /* background-color: #fcfcfc; */
+    background-image: url('./img/bg.jpg');
+    background-size: cover;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0.5em;
+    background-color: #fcfcfc;
+}
+
+.logo {
+    width: auto;
+    height: 4em;
+}
+
+.footer {
+    z-index: 100;
+    background-color: white;
+    color: #666;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 2em;
+}
+  
+.content {
+    margin-bottom: 3em;
+    max-width: 25em;
+    margin: 3em auto;
+    padding: 2em;
+    border-radius: 0.5em;
+    background-color: #222e;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+.select-group > p {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    color: white;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    margin: 1em auto;
+}
+
+button {
+    min-width: 5em;
+    margin: 0.25em;
+}
+
+.bottom-text, .bottom-text:hover {
+    cursor: pointer;
+    margin: auto;
+    color: #ddd;
+    text-decoration: none;
+}
+
+.bottom-text:hover {
+    color: lightblue;
+}
+
+.form-check {
+    color: white;
+    margin-top: 1em;
+}
+
+.form-check a {
+    color: lightblue;
+    margin-top: 1em;
+}
