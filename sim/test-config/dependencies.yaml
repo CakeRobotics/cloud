@@ -1,0 +1,83 @@
+version: '3.7'
+
+networks:
+    default:
+        name: sims-test
+        driver: bridge
+
+services:
+    sims-db:
+        image: mongo
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: cake
+        ports:
+            - 127.0.0.1:4665:27017
+    
+    templates:
+        image: images.cakerobotics.com/mostafa/templates:latest
+        environment:
+            AUTH_SERVICE: http://auth:8000
+            MONGO_HOST: templates-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: cake
+            TEST_ADMIN_PASSWORD: admin
+            TEST_ADMIN_USERNAME: admin
+        depends_on:
+            - templates-db
+        ports:
+            - 127.0.0.1:5075:8000
+    
+    templates-db:
+        image: mongo
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: cake
+
+    projects:
+        image: images.cakerobotics.com/mostafa/projects:latest
+        environment:
+            AUTH_SERVICE: http://auth:8000
+            MONGO_HOST: projects-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: cake
+            TEST_ADMIN_PASSWORD: admin
+            TEST_ADMIN_USERNAME: admin
+            TEMPLATES_SERVICE: http://templates:8000
+        depends_on:
+            - projects-db
+            - templates
+        ports:
+            - 127.0.0.1:5085:8000
+    
+    projects-db:
+        image: mongo
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: cake
+
+    auth:
+        image: images.cakerobotics.com/mostafa/auth:latest
+        environment:
+            POSTGRES_HOST: auth-db
+            POSTGRES_USER: cake
+            POSTGRES_PASSWORD: cake
+            POSTGRES_DB: auth
+            JWT_SECRET: cake
+            REQUIRE_REGISTERATION_TOKEN: 0
+            ADMIN_USERNAME: admin
+            ADMIN_PASSWORD: admin
+            ADMIN_EMAIL: admin@example.com
+        depends_on:
+            - auth-db
+        ports:
+            - 127.0.0.1:5005:8000
+
+    auth-db:
+        image: postgres
+        environment:
+            POSTGRES_USER: cake
+            POSTGRES_PASSWORD: cake
+            POSTGRES_DB: auth

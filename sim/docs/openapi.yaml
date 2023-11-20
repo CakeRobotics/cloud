@@ -1,0 +1,283 @@
+openapi: "3.0.0"
+info:
+  description: |
+    This service provides an API for storing money credit for each user.
+  version: "0.0.1"
+  title: "Cake Simulation Service"
+  termsOfService: "https://cakerobotics.com/terms/"
+  contact:
+    email: "support@cakerobotics.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "https://cloud.cakerobotics.com/api/sim"
+
+components:
+  examples:
+    simulation-starting:
+      description: A simulation that is just starting
+      value:
+        id: "61420269ab609ba401975c23"
+        creationDate: "2021-10-19T19:13:26.756Z"
+        owner: mostafa
+        projectId: "61420269ab609ba401975c00"
+        state: starting
+        step: "creating-node"
+    simulation-up:
+      description: A simulation that is running
+      value:
+        id: "61420269ab609ba401975c23"
+        creationDate: "2021-10-19T19:13:26.756Z"
+        owner: mostafa
+        projectId: "61420269ab609ba401975c00"
+        state: up
+        url: "https://sim.cakerobotics.com/61420269ab609ba401975c2c"
+        duration: 4
+    simulation-stopped:
+      description: A simulation that is finished
+      value:
+        id: "61420269ab609ba401975c23"
+        creationDate: "2021-10-19T19:13:26.756Z"
+        owner: mostafa
+        projectId: "61420269ab609ba401975c00"
+        state: stopped-user
+        duration: 344
+    simulation-list:
+      description: List of simulations
+      value:
+      - id: "61420269ab609ba401975c23"
+        creationDate: "2021-10-19T19:13:26.756Z"
+        owner: mostafa
+        projectId: "61420269ab609ba401975c00"
+        state: starting
+        step: "creating-node"
+        duration: 23
+      - id: "61420269ab609ba401975c23"
+        creationDate: "2021-10-19T19:13:26.756Z"
+        owner: mostafa
+        projectId: "61420269ab609ba401975c00"
+        state: stopped-user
+        duration: 344
+
+
+  parameters:
+    simulationId:
+      name: simulationId
+      description: Simulation ID
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "61420269ab609ba401975c2c"
+
+  schemas:
+    simulation:
+      type: object
+      required:
+        - creationDate
+        - state
+        - owner
+        - projectId
+      properties:
+        creationDate:
+          type: string
+        owner:
+          type: string
+        projectId:
+          type: string
+        state:
+          type: string
+          enum: [starting, up, stopped-user, stopped-error, stopped-watchdog, reloading]
+        step:
+          type: string
+          enum: [build-app-image, start-sim-node, running]
+          description: When state=starting, this shows which step of the process is currently happening.
+        url:
+          type: string
+          description: When state=up, this shows the URL that can be used to view the simulation.
+        duration:
+          type: number
+          description: Simulation uptime in seconds
+
+    simulation-list:
+      type: array
+      items:
+        "$ref": "#/components/schemas/simulation"
+
+  securitySchemes:
+    adminUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    normalUser:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+
+paths:
+  /:
+    get:
+      summary: Get all simulations
+      description: Returns the list of all simulations that current user has access to
+      operationId: getAll
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - name: owner
+          description: Owner (only applicable by admin)
+          in: query
+          required: false
+          schema:
+            type: string
+            example: carol
+        - name: projectId
+          description: ID of the corresponding project
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "61420269ab609ba401975c2c"
+      responses:
+        '200':
+          description: The list of simulations
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/simulation-list"
+              examples:
+                simulation-list:
+                  "$ref": "#/components/examples/simulation-list"
+    post:
+      summary: Create a simulation
+      description: Async'ly starts creating and starting simulation for a project
+      operationId: createSimulation
+      security:
+        - normalUser: []
+        - adminUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - projectId
+              properties:
+                projectId:
+                  type: string
+                  description: Project ID
+                world:
+                  type: string
+                  description: Simulation world
+              example:
+                projectId: "6142039cab609ba401975c2d"
+                world: "cafe"
+      responses:
+        '202':
+          description: Accepted. Creating the simulation. Pool GET method on /{simulation_id} for status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  simulationId:
+                    type: string
+                example:
+                  simulationId: "61420269ab609ba401975c2c"
+        '409':
+          description: Another simulation exists for this project.
+        '404':
+          description: Project ID lookup failed.
+        '402':
+          description: Payment required.
+
+  /{simulationId}:
+    get:
+      summary: Get status of a simulation
+      operationId: getSimulation
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/simulationId"
+      responses:
+        '200':
+          description: Simulation status is returned.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/simulation"
+              examples:
+                simulation-starting:
+                  "$ref": "#/components/examples/simulation-starting"
+                simulation-up:
+                  "$ref": "#/components/examples/simulation-up"
+                simulation-stopped:
+                  "$ref": "#/components/examples/simulation-stopped"
+
+        '404':
+          description: Simulation ID lookup failed.
+
+  /{simulationId}/logs:
+    get:
+      summary: Get simulation logs
+      operationId: getLogs
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/simulationId"
+        - name: group
+          description: Log group; see enums
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pipeline, sim-container, app-container]
+            example: app-container
+      responses:
+        '200':
+          description: Logs in plain text
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Hello world\n"
+        '404':
+          description: Simulation ID lookup failed.
+
+  /{simulationId}/stop:
+    post:
+      summary: Stop a simulation
+      operationId: stopSimulation
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/simulationId"
+      responses:
+        '200':
+          description: Stopping simulation.
+        '404':
+          description: Simulation ID lookup failed.
+
+  /{simulationId}/hotreload:
+    post:
+      summary: Update user code and restart the simulation
+      description: Used for quick, in-place code testing.
+      operationId: hotReload
+      security:
+        - normalUser: []
+        - adminUser: []
+      parameters:
+        - "$ref": "#/components/parameters/simulationId"
+      responses:
+        '202':
+          description: Accepted.
+        '404':
+          description: Simulation ID lookup failed.
+        '409':
+          description: Hot-reload is not possible because project props have changed.

@@ -1,0 +1,62 @@
+pipeline {
+  agent any
+  stages {
+    stage('Publish Docs') {
+      steps {
+        script {
+          withCredentials([usernamePassword(credentialsId: 'jenkins-keycloak', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            env.TOKEN = sh(script: '''
+            curl -H "Content-Type: application/json" -d "{\\"username\\": \\"${USERNAME}\\", \\"password\\": \\"${PASSWORD}\\"}" https://utils.france-1.servers.cakerobotics.com/get-token
+            ''', returnStdout: true)
+            sh '''
+            set +x
+            echo "Using ${USERNAME}:*****"
+            TEMPFILE=$(mktemp)
+            curl -o ${TEMPFILE} -H "Authorization: Bearer ${TOKEN}" -F "openapi.yaml=@${WORKSPACE}/docs/openapi.yaml" https://utils.france-1.servers.cakerobotics.com/publish-api-doc/sim
+            cat ${TEMPFILE} | grep Success
+            set -x
+            '''
+          }
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
+        script {
+          dockerImage = docker.build "images.cakerobotics.com/mostafa/sim:latest", "."
+        }
+      }
+    }
+
+    stage('Push') {
+      steps {
+        script {
+          withDockerRegistry(credentialsId: 'jenkins-keycloak', url: 'https://images.cakerobotics.com/v2/') {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        script {
+          withCredentials([usernamePassword(credentialsId: 'jenkins-keycloak', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            env.TOKEN = sh(script: '''
+            curl -H "Content-Type: application/json" -d "{\\"username\\": \\"${USERNAME}\\", \\"password\\": \\"${PASSWORD}\\"}" https://utils.france-1.servers.cakerobotics.com/get-token
+            ''', returnStdout: true)
+            sh '''
+            set +x
+            echo "Using ${USERNAME}:*****"
+            TEMPFILE=$(mktemp)
+            curl -o ${TEMPFILE} -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -d \'{"service": "sim", "directory": "/services/cake"}\' https://utils.france-1.servers.cakerobotics.com/docker-compose-deliver
+            cat ${TEMPFILE} | grep Success
+            set -x
+            '''
+          }
+        }
+      }
+    }
+  }
+}
