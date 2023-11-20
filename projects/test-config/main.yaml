@@ -1,0 +1,22 @@
+version: '3.7'
+
+networks:
+    default:
+        external:
+            name: projects-test
+
+services:
+    projects:
+        build:
+            context: ../
+        entrypoint: /bin/sh -c "cd /app && yarn test"
+        environment:
+            AUTH_SERVICE: http://auth:8000
+            MONGO_HOST: projects-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: cake
+            TEMPLATES_SERVICE: http://templates:8000
+            TEST_ADMIN_PASSWORD: admin
+            TEST_ADMIN_USERNAME: admin
+        tty: true
