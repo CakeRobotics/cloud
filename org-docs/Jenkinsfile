@@ -1,0 +1,45 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        script {
+          dockerImage = docker.build "images.cakerobotics.com/mostafa/org-docs:latest", "."
+        }
+
+      }
+    }
+
+    stage('Push') {
+      steps {
+        script {
+          withDockerRegistry(credentialsId: 'jenkins-keycloak', url: 'https://images.cakerobotics.com/v2/') {
+            dockerImage.push()
+          }
+        }
+
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        script {
+          withCredentials([usernamePassword(credentialsId: 'jenkins-keycloak', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            env.TOKEN = sh(script: '''
+            curl -H "Content-Type: application/json" -d "{\\"username\\": \\"${USERNAME}\\", \\"password\\": \\"${PASSWORD}\\"}" https://utils.france-1.servers.cakerobotics.com/get-token
+            ''', returnStdout: true)
+            sh '''
+            set +x
+            echo "Using ${USERNAME}:*****"
+            TEMPFILE=$(mktemp)
+            curl -o ${TEMPFILE} -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -d \'{"service": "nginx", "directory": "/services/com.cakerobotics.org-docs"}\' https://utils.france-1.servers.cakerobotics.com/docker-compose-deliver
+            cat ${TEMPFILE} | grep Success
+            set -x
+            '''
+          }
+        }
+      }
+    }
+
+  }
+}

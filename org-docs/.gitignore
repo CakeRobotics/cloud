@@ -1,0 +1,7 @@
+out
+*.aux
+*.log
+*.pdf
+*.out
+*.synctex.gz
+cake-classes
