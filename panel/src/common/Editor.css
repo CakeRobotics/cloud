@@ -1,0 +1,17 @@
+.code-editor-container {
+    overflow-y: scroll;
+    height: 20rem;
+    border: solid #555 1px;
+    border-radius: 3px;
+}
+
+.code-editor {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    background-color: #fdfdfd;
+    min-height: 20rem;
+}
+
+.code-editor-disabled {
+    background-color: #bbb;
+}

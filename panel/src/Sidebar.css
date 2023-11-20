@@ -1,0 +1,16 @@
+.sidebar-panel {
+    background-color: #ddd;
+    border-radius: 3px;
+    font-weight: 100;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.action-info-text {
+    font-size: small;
+}
+
+.action-info-sub-text {
+    font-size: x-small;
+}

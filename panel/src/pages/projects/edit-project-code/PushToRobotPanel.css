@@ -1,0 +1,15 @@
+.inlist-circle {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    border-radius: 50%;
+    margin-right: 0.25em;
+}
+
+.inlist-circle-green {
+    background-color: green;
+}
+
+.inlist-circle-gray {
+    background-color: #000;
+}

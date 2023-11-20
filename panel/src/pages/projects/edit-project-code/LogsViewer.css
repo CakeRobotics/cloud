@@ -1,0 +1,28 @@
+.logs-viewer-container {
+    margin: 1em 0em;
+}
+
+.logs-viewer-title {
+    font-size: small;
+    background-color: #333;
+    color: #fff;
+    padding: 0.25em 10px;
+    border-radius: 0.25em 0.25em 0em 0em;
+    display: flex;
+}
+
+.logs-viewer {
+    font-family: monospace;
+    font-size: small;
+    background-color: #ddd;
+    white-space: pre-line;
+    padding: 0.25em 10px;
+    overflow-y: scroll;
+    height: 18em;
+    border-radius: 0em 0em 0.25em 0.25em;
+    border: solid #333 1px;
+}
+
+.log-group {
+    font-weight: 900;
+}

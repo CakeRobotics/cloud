@@ -1,0 +1,12 @@
+.list-container thead {
+    background-color: #ddd;
+}
+
+.list-container .card-body {
+    border-radius: 3px;
+    padding: 0;
+}
+
+.list-container .table>:not(:last-child)>:last-child>* {
+    border-bottom-color: transparent;
+}

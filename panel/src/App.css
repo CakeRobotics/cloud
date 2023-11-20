@@ -1,0 +1,32 @@
+body, html {
+    --bg-brit: 250;
+    /* font-family: "Actor", sans-serif; */
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: rgba(var(--bg-brit), var(--bg-brit), var(--bg-brit));
+}
+
+.breadcrumb-item {
+    --bs-breadcrumb-divider: ">";
+}
+
+a {
+    text-decoration: none;
+}
+
+.link-button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    color: #069;
+    cursor: pointer;
+}
+
+/* Hide arrows in number input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
