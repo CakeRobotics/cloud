@@ -1,0 +1,21 @@
+version: '3.7'
+
+networks:
+    default:
+        external:
+            name: devices-test
+
+services:
+    devices:
+        build:
+            context: ../
+        entrypoint: /bin/sh -c "cd /app && yarn test"
+        environment:
+            AUTH_SERVICE: http://auth:8000
+            MONGO_HOST: devices-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: cake
+            TEST_ADMIN_PASSWORD: admin
+            TEST_ADMIN_USERNAME: admin
+        tty: true
