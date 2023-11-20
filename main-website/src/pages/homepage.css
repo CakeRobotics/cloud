@@ -1,0 +1,38 @@
+.carousel-caption {
+    bottom: 3rem;
+    padding: 0.4em 1em;
+}
+
+.carousel-caption > * {
+    background-color: white;
+    width: fit-content;
+    padding: 0.1em 0.2em;
+    margin: 0.2em auto;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px black;
+}
+
+.carousel-caption > h4 {
+    padding: 0.2em 0.4em;
+    font-weight: 100;
+}
+
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    background-color: #000;
+    border-radius: 50%;
+    padding: 1em;
+}
+
+.carousel {
+    cursor: pointer;
+}
+
+.homepage-btn-gp > * {
+    margin: 0.6em 0.3em;
+    width: 8em;
+}
+
+.homepage-btn-gp {
+    width: auto;
+    margin: auto;
+}
