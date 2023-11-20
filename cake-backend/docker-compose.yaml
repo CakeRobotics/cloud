@@ -1,0 +1,173 @@
+version: '3.7'
+
+volumes:
+    auth-db:
+    devices-db:
+    projects-db:
+    sim-db:
+    templates-db:
+    user-code:
+
+services:
+    reverse-proxy:
+        container_name: cake-core-nginx
+        image: nginx
+        ports:
+            - 127.0.0.1:${LISTEN_PORT}:80
+        restart: always
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+    auth:
+        image: images.cakerobotics.com/mostafa/auth:latest
+        container_name: cake-auth
+        depends_on:
+            - auth-db
+        environment:
+            POSTGRES_HOST: auth-db
+            POSTGRES_USER: cake
+            POSTGRES_PASSWORD: ${AUTH_POSTGRES_PASSWORD}
+            POSTGRES_DB: auth
+            JWT_SECRET: ${AUTH_JWT_SECRET}
+            REQUIRE_REGISTERATION_TOKEN: ${REQUIRE_REGISTERATION_TOKEN}
+            ADMIN_USERNAME: ${ADMIN_USERNAME}
+            ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+            ADMIN_EMAIL: ${ADMIN_EMAIL}
+        restart: always
+        volumes:
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    auth-db:
+        image: postgres:13
+        container_name: cake-auth-db
+        environment:
+            POSTGRES_USER: cake
+            POSTGRES_PASSWORD: ${AUTH_POSTGRES_PASSWORD}
+            POSTGRES_DB: auth
+        restart: always
+        volumes:
+            - auth-db:/var/lib/postgresql/data
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    projects:
+        image: images.cakerobotics.com/mostafa/projects:latest
+        container_name: cake-projects
+        depends_on:
+            - projects-db
+            - auth
+        environment:
+            MONGO_HOST: projects-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: ${PROJECTS_MONGO_PASSWORD}
+            AUTH_SERVICE: http://auth:8000
+            TEMPLATES_SERVICE: http://templates:8000
+            DEVICES_SERVICE: http://devices:8000
+        restart: always
+        volumes:
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    projects-db:
+        image: mongo:4
+        container_name: cake-projects-db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: ${PROJECTS_MONGO_PASSWORD}
+        restart: always
+        volumes:
+            - projects-db:/data/db
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    sim:
+        image: images.cakerobotics.com/mostafa/sim:latest
+        container_name: cake-sim
+        depends_on:
+            - sim-db
+            - auth
+        environment:
+            MONGO_HOST: sim-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: ${SIM_MONGO_PASSWORD}
+            AUTH_SERVICE: http://auth:8000
+            PROJECTS_SERVICE: http://projects:8000
+            PROJECTS_SERVICE_PUBLIC: https://cloud.cakerobotics.com/api/projects
+        restart: always
+        volumes:
+            - "/home/mostafa/.arvan:/root/.arvan:ro"
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    sim-db:
+        image: mongo:4
+        container_name: cake-sim-db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: ${SIM_MONGO_PASSWORD}
+        restart: always
+        volumes:
+            - sim-db:/data/db
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    templates:
+        image: images.cakerobotics.com/mostafa/templates:latest
+        container_name: cake-templates
+        depends_on:
+            - templates-db
+            - auth
+        environment:
+            MONGO_HOST: templates-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: ${TEMPLATES_MONGO_PASSWORD}
+            AUTH_SERVICE: http://auth:8000
+        restart: always
+        volumes:
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    templates-db:
+        image: mongo:4
+        container_name: cake-templates-db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: ${TEMPLATES_MONGO_PASSWORD}
+        restart: always
+        volumes:
+            - templates-db:/data/db
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    devices:
+        image: images.cakerobotics.com/mostafa/devices:latest
+        container_name: cake-devices
+        depends_on:
+            - devices-db
+            - auth
+        environment:
+            MONGO_HOST: devices-db
+            MONGO_PORT: 27017
+            MONGO_USER: cake
+            MONGO_PASSWORD: ${DEVICES_MONGO_PASSWORD}
+            AUTH_SERVICE: http://auth:8000
+        restart: always
+        volumes:
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
+
+    devices-db:
+        image: mongo:4
+        container_name: cake-devices-db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cake
+            MONGO_INITDB_ROOT_PASSWORD: ${DEVICES_MONGO_PASSWORD}
+        restart: always
+        volumes:
+            - devices-db:/data/db
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
