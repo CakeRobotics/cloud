@@ -1,0 +1,55 @@
+<!doctype html>
+<html dir="auto">
+    <head>
+        <title>Cake Org Docs List</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+        <link rel="stylesheet" href="style.css"/>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+    </head>
+    <body>
+        <header class="py-3 mb-4 border-bottom">
+            <h1>Cake Org Docs</h1>
+            <p class="email">docs-admin@cakerobotics.com</p>
+            <p class="sign-out"><a href="https://oauth2.cakerobotics.com/oauth2/sign_out?rd=https%3A%2F%2Fdev-login.cakerobotics.com%2Fauth%2Frealms%2Fdevs%2Fprotocol%2Fopenid-connect%2Flogout%3Fredirect_uri%3Dhttps%253A%252F%252Fcakerobotics.com%252F">Sign out</a></p>
+        </header>
+        <main>
+            <table data-toggle="table" data-search="true" data-sort-name="date" data-sort-order="desc" class="table-borderless">
+                <thead>
+                    <tr>
+                        <th data-sortable="true">ID</th>
+                        <th>Language</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Labels</th>
+                        <th>Scope</th>
+                        <th>Version</th>
+                        <th data-field="date" data-sortable="true">Date</th>
+                        <th>Links</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in (articles) %}
+                        {% for language in article.languages %}
+                        {% set dir = "rtl" if language.langcode == "fa" else "ltr" %}
+                        <tr>
+                            <td>{{article.id}}</td>
+                            <td>{{language.langcode}}</td>
+                            <td><a dir="{{dir}}">{{language.about.FULL_TITLE}}</a></td>
+                            <td>{{language.main_author}}</td>
+                            <td>{{language.about.LABELS | join(' - ')}}</td>
+                            <td>{{language.about.SCOPE}}</td>
+                            <td>{{language.about.VERSIONS | length}}</td>
+                            <td>{{format_date(language.about.VERSIONS[-1].DATE)}}</td>
+                            <td>[<a href="pdf/{{language.langcode}}/by_id/{{article.id}}.pdf">pdf</a>] [<a href="zip/{{language.langcode}}/by_id/{{article.id}}.zip">tex</a>]</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </body>
+</html>
